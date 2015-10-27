@@ -1,7 +1,7 @@
 package com.example.mary.carparkdemo1;
 
 import com.google.android.gms.maps.model.LatLng;
-
+import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
@@ -12,24 +12,16 @@ public class CarPark implements Serializable {
     private String name;
     private String address;
     private String webPage;
-    private double cpLat, cpLong;
+    private ArrayList<LatLng> coordinates;
     private int freeSpacesNumber;
     private boolean freeSpacesKnown;
 
-    public CarPark(String inName, String inAddress, String inWebPage, double inCpLat,
-                double inCpLong, int inFreeSpacesNumber, boolean inFreeSpacesknown) {
-        name = inName;
-        address = inAddress;
-        webPage = inWebPage;
-        cpLat = inCpLat;
-        cpLong = inCpLong;
-        freeSpacesNumber = inFreeSpacesNumber;
-        freeSpacesKnown = inFreeSpacesknown;
+    public CarPark(){
 
     }
 
-    public String getName() {
-        return name;
+
+    public String getName() {return name;
     }
 
     public void setName(String name) {
@@ -52,20 +44,12 @@ public class CarPark implements Serializable {
         this.webPage = webPage;
     }
 
-    public double getCpLat() {
-        return cpLat;
+    public ArrayList<LatLng> getCoordinates() {
+        return coordinates;
     }
 
-    public void setCpLat(double cpLat) {
-        this.cpLat = cpLat;
-    }
-
-    public double getCpLong() {
-        return cpLong;
-    }
-
-    public void setCpLong(double cpLong) {
-        this.cpLong = cpLong;
+    public void setCoordinates(ArrayList<LatLng> coordinates) {
+        this.coordinates = coordinates;
     }
 
     public int getFreeSpacesNumber() {
@@ -84,9 +68,17 @@ public class CarPark implements Serializable {
         this.freeSpacesKnown = freeSpacesKnown;
     }
 
-    public LatLng getLocation()
+    public LatLng getMidPointLocation()
     {
-        return new LatLng(cpLat, cpLong);
+        double totalLat = 0;
+        double totalLng = 0;
+
+        for (LatLng c: coordinates){
+            totalLat += c.latitude;
+            totalLng += c.longitude;
+        }
+
+        return new LatLng(totalLat/coordinates.size(),totalLng/coordinates.size());
     }
 }
 

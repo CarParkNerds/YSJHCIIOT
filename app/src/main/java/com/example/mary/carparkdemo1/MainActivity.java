@@ -36,32 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadCarParkData();
-
        // create map and add content
         createMapView();
         addMapContent();
-
-    }
-
-    // load bus CarPark information from the database
-    private void loadCarParkData() {
-
-        carParks.add( new CarPark("Rowntree Park","Rowntree Park car park, York, YO23 1JQ","http://www.york.gov.uk/directory_record/511/rowntrees_park_car_park",53.950620, -1.079530,2, true));
-        carParks.add( new CarPark("East Parade","East Parade car park, York, YO31 0XH","https://www.york.gov.uk/directory_record/510/east_parade_car_park",53.964356, -1.065754,11, true));
-        carParks.add( new CarPark("Moor Lane","Moor Lane car park, Moor Lane, York, YO24 1LW","https://www.york.gov.uk/directory_record/514/moor_lane_car_park",53.933820, -1.113617,95, true));
-        carParks.add( new CarPark("Union Terrace","Clarence Street, York, YO31 7ES","http://www.york.gov.uk/directory_record/508/union_terrace_car_park",53.967632, -1.082782,0,false));
-        carParks.add( new CarPark("Castle Mills","Piccadilly, York, YO1 9NX","http://www.york.gov.uk/directory_record/512/castle_mills_car_park",53.956533, -1.077828,0, true));
-        carParks.add( new CarPark("Foss Bank","Jewbury, York, YO31 7PL","http://www.york.gov.uk/directory_record/501/foss_bank_car_park",53.962338, -1.076124,31, true));
-        carParks.add( new CarPark("Monk Bar","St John’s Street, York, YO31 7QR","http://www.york.gov.uk/directory_record/504/monk_bar_car_park",53.964794, -1.078715,0, false));
-        carParks.add( new CarPark("Bootham Row","Bootham Row, York, YO30 7BP","http://www.york.gov.uk/directory_record/498/bootham_row_car_park",53.964542, -1.084789,7,true));
-        carParks.add( new CarPark("Bishopthorpe Road","Bishopthorpe Road, York, YO23 1NA","http://www.york.gov.uk/directory_record/497/bishopthorpe_road_car_park",53.951860, -1.085047,43, true));
-        carParks.add( new CarPark("Marygate","Frederick Street, York, YO30 7DT","http://www.york.gov.uk/directory_record/503/marygate_car_park",53.962350, -1.090873,29, true));
-        carParks.add( new CarPark("Piccadilly","Piccadilly, York, YO1 9NX","http://www.york.gov.uk/directory_record/506/piccadilly_car_park",53.956546, -1.077796,37, true));
-        carParks.add( new CarPark("Nunnery Lane","Nunnery Lane, York, YO23 1AA","http://www.york.gov.uk/directory_record/505/nunnery_lane_car_park",53.954371, -1.087429,19,true));
-        carParks.add( new CarPark("Castle","Tower Street, York, YO1 9SA","http://www.york.gov.uk/directory_record/499/castle_car_park",53.955769, -1.080923,10, true));
-        carParks.add( new CarPark("St Georges Field","St Georges Field, Tower Street, York","http://www.york.gov.uk/directory_record/507/st_georges_field_car_park",53.954074, -1.079892,33, true));
-        carParks.add( new CarPark("Esplanade","West Esplanade, York, YO1 6FZ","http://www.york.gov.uk/directory_record/500/esplanade_car_park",53.960014, -1.088640,0, false));
 
     }
 
@@ -134,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onInfoWindowClick(Marker marker) {
 
                     for (CarPark carPark : carParks) {
-                        if (carPark.getLocation().equals(marker.getPosition())) {
+                        if (carPark.getMidPointLocation().equals(marker.getPosition())) {
                             Intent intent = new Intent();
                             intent.setClass(MainActivity.this, CarParkInfo.class);
 
@@ -150,37 +127,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-//                    Toast.makeText(getApplicationContext(), "clicked me", Toast.LENGTH_SHORT).show();
-
-      //              Log.d("", marker.getTitle());
                 }
             });
-            // when a marker is clicked, start the Timetable screen, passing information
-            // on the selected bus CarPark
-            /*
-            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    //              marker.showInfoWindow();
-                    for (CarPark CarPark : CarParks) {
-                        if (CarPark.getCarParkLocation().equals(marker.getPosition())) {
-                            Intent intent = new Intent();
-                            intent.setClass(CarParkMap.this, Timetable.class);
 
-                            Bundle bundle = new Bundle();
-
-                            bundle.putSerializable("CarPark", CarPark);
-
-                            intent.putExtras(bundle);
-
-                            startActivity(intent);
-
-                        }
-                    }
-                    return true;
-                }
-            });
-            */
 
         }
     }
@@ -195,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 if (carPark.getFreeSpacesNumber() < 10)
                 {
                     googleMap.addMarker(new MarkerOptions()
-                            .position(carPark.getLocation())
+                            .position(carPark.getMidPointLocation())
                             .title(carPark.getName())
                                     // this needs fixing as ass text shown on one line
                             .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
@@ -206,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         carPark.getFreeSpacesNumber() < 30)
                 {
                     googleMap.addMarker(new MarkerOptions()
-                            .position(carPark.getLocation())
+                            .position(carPark.getMidPointLocation())
                             .title(carPark.getName())
                                     // this needs fixing as ass text shown on one line
                             .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
@@ -216,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 if (carPark.getFreeSpacesNumber() >= 30)
                 {
                     googleMap.addMarker(new MarkerOptions()
-                            .position(carPark.getLocation())
+                            .position(carPark.getMidPointLocation())
                             .title(carPark.getName())
                                     // this needs fixing as ass text shown on one line
                             .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
@@ -227,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             } else
             {
                 googleMap.addMarker(new MarkerOptions()
-                        .position(carPark.getLocation())
+                        .position(carPark.getMidPointLocation())
                         .title(carPark.getName())
                                 // this needs fixing as ass text shown on one line
                         .snippet("Free Spaces: unknown\n\nAddress: " + carPark.getAddress())

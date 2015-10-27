@@ -2,6 +2,8 @@ package com.example.mary.carparkdemo1;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,10 +18,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CarParkMap extends AppCompatActivity {
 
@@ -34,35 +47,13 @@ public class CarParkMap extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
-        loadCarParkData();
-
-       // create map and add content
+        // create map and add content
         createMapView();
         addMapContent();
 
     }
 
-    // load bus CarPark information from the database
-    private void loadCarParkData() {
 
-        carParks.add( new CarPark("Rowntree Park","Rowntree Park car park, York, YO23 1JQ","http://www.york.gov.uk/directory_record/511/rowntrees_park_car_park",53.950620, -1.079530,2, true));
-        carParks.add( new CarPark("East Parade","East Parade car park, York, YO31 0XH","https://www.york.gov.uk/directory_record/510/east_parade_car_park",53.964356, -1.065754,11, true));
-        carParks.add( new CarPark("Moor Lane","Moor Lane car park, Moor Lane, York, YO24 1LW","https://www.york.gov.uk/directory_record/514/moor_lane_car_park",53.933820, -1.113617,95, true));
-        carParks.add( new CarPark("Union Terrace","Clarence Street, York, YO31 7ES","http://www.york.gov.uk/directory_record/508/union_terrace_car_park",53.967632, -1.082782,0,false));
-        carParks.add( new CarPark("Castle Mills","Piccadilly, York, YO1 9NX","http://www.york.gov.uk/directory_record/512/castle_mills_car_park",53.956533, -1.077828,0, true));
-        carParks.add( new CarPark("Foss Bank","Jewbury, York, YO31 7PL","http://www.york.gov.uk/directory_record/501/foss_bank_car_park",53.962338, -1.076124,31, true));
-        carParks.add( new CarPark("Monk Bar","St John’s Street, York, YO31 7QR","http://www.york.gov.uk/directory_record/504/monk_bar_car_park",53.964794, -1.078715,0, false));
-        carParks.add( new CarPark("Bootham Row","Bootham Row, York, YO30 7BP","http://www.york.gov.uk/directory_record/498/bootham_row_car_park",53.964542, -1.084789,7,true));
-        carParks.add( new CarPark("Bishopthorpe Road","Bishopthorpe Road, York, YO23 1NA","http://www.york.gov.uk/directory_record/497/bishopthorpe_road_car_park",53.951860, -1.085047,43, true));
-        carParks.add( new CarPark("Marygate","Frederick Street, York, YO30 7DT","http://www.york.gov.uk/directory_record/503/marygate_car_park",53.962350, -1.090873,29, true));
-        carParks.add( new CarPark("Piccadilly","Piccadilly, York, YO1 9NX","http://www.york.gov.uk/directory_record/506/piccadilly_car_park",53.956546, -1.077796,37, true));
-        carParks.add( new CarPark("Nunnery Lane","Nunnery Lane, York, YO23 1AA","http://www.york.gov.uk/directory_record/505/nunnery_lane_car_park",53.954371, -1.087429,19,true));
-        carParks.add( new CarPark("Castle","Tower Street, York, YO1 9SA","http://www.york.gov.uk/directory_record/499/castle_car_park",53.955769, -1.080923,10, true));
-        carParks.add( new CarPark("St Georges Field","St Georges Field, Tower Street, York","http://www.york.gov.uk/directory_record/507/st_georges_field_car_park",53.954074, -1.079892,33, true));
-        carParks.add( new CarPark("Esplanade","West Esplanade, York, YO1 6FZ","http://www.york.gov.uk/directory_record/500/esplanade_car_park",53.960014, -1.088640,0, false));
-
-    }
 
     // create the google map
     private void createMapView() {
@@ -92,12 +83,16 @@ public class CarParkMap extends AppCompatActivity {
         /** Make sure that the map has been initialised **/
         if (null != googleMap) {
 
+            getData get = new getData();
+            get.execute("http://data.cyc.opendata.arcgis.com/datasets/601ef57b2c7449b19630a3e243fc5293_4.geojson");
+
             // add the bus CarPark markers
             addMapMarkers();
 
+
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-             // move map to default Location in centre of York
+            // move map to default Location in centre of York
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 14));
 
             // add the google location button, allowing user to return map to current location
@@ -134,14 +129,14 @@ public class CarParkMap extends AppCompatActivity {
                 public void onInfoWindowClick(Marker marker) {
 
                     for (CarPark carPark : carParks) {
-                        if (carPark.getLocation().equals(marker.getPosition())) {
+                        if (carPark.getMidPointLocation().equals(marker.getPosition())) {
                             Intent intent = new Intent();
                             intent.setClass(CarParkMap.this, CarParkInfo.class);
 
                             Bundle bundle = new Bundle();
 
-                            bundle.putSerializable("carPark", carPark);
-
+                            bundle.putSerializable("spaces", carPark.getFreeSpacesNumber());
+                            bundle.putSerializable("website", carPark.getWebPage());
                             intent.putExtras(bundle);
 
                             startActivity(intent);
@@ -150,11 +145,31 @@ public class CarParkMap extends AppCompatActivity {
                     }
                 }
             });
+
         }
     }
 
     // add markers to the map
     // markers show the number of free spaces, and are coloured according to the number of free spaces
+
+    private void drawCarParkLines(){
+
+        for (CarPark carPark : carParks) {
+            LatLng previousPos = null;
+            Log.e("Car park coord", "" + carPark.getCoordinates().size());
+            for (LatLng coordinates : carPark.getCoordinates()) {
+                if (previousPos == null) {
+                    previousPos = new LatLng(coordinates.latitude, coordinates.longitude);
+                } else {
+                    LatLng currentPos = new LatLng(coordinates.latitude, coordinates.longitude);
+                    googleMap.addPolyline(new PolylineOptions().add((previousPos), (currentPos)).width(5).color(Color.BLUE));
+                    previousPos = currentPos;
+                }
+            }
+        }
+    }
+
+
     private void addMapMarkers() {
 
         String iconText = "";
@@ -168,24 +183,20 @@ public class CarParkMap extends AppCompatActivity {
 
                 iconText = Integer.toString(carPark.getFreeSpacesNumber());
                 spacesText = Integer.toString(carPark.getFreeSpacesNumber());
-                if (carPark.getFreeSpacesNumber() < 10)
-                {
+                if (carPark.getFreeSpacesNumber() < 10) {
                     ig.setStyle(IconGenerator.STYLE_RED);
-                   }
+                }
                 if (carPark.getFreeSpacesNumber() >= 10 &&
-                        carPark.getFreeSpacesNumber() < 30)
-                {
+                        carPark.getFreeSpacesNumber() < 30) {
                     ig.setStyle(IconGenerator.STYLE_ORANGE);
-                    }
-                if (carPark.getFreeSpacesNumber() >= 30)
-                {
+                }
+                if (carPark.getFreeSpacesNumber() >= 30) {
                     ig.setStyle(IconGenerator.STYLE_GREEN);
                 }
 
-            } else
-            {
+            } else {
                 iconText = "?";
-                spacesText = "unknown";
+                spacesText = "Unknown";
                 ig.setStyle(IconGenerator.STYLE_BLUE);
             }
 
@@ -194,11 +205,98 @@ public class CarParkMap extends AppCompatActivity {
 
             // add marker
             googleMap.addMarker(new MarkerOptions()
-                    .position(carPark.getLocation())
+                    .position(carPark.getMidPointLocation())
                     .title(carPark.getName())
                     .snippet("Free Spaces: " + spacesText + "\n\nAddress: " + carPark.getAddress())
                     .icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
                     .draggable(false));
+        }
+    }
+
+    private class getData extends AsyncTask<String, Void, String> {
+
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+            // For storing data from web service
+            String data = "";
+
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        //Downloads the data from the URL requested
+        private String downloadUrl(String strUrl) throws IOException {
+            String data = "";
+            URL url = new URL(strUrl);
+            // Creating an http connection to communicate with url
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            // Connecting to url
+            urlConnection.connect();
+            InputStream iStream = urlConnection.getInputStream();
+            try {
+                // Reading data from url
+                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+                StringBuffer sb = new StringBuffer();
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                data = sb.toString();
+                br.close();
+
+            } catch (Exception e) {
+
+            } finally {
+                urlConnection.disconnect();
+                if (iStream != null) {
+                    iStream.close();
+                }
+            }
+            return data;
+        }
+
+        // Executes in UI thread, after the execution of doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            JSONObject jsonObject;
+            try {
+                jsonObject = new JSONObject(result);
+                for (int i = 0; i < jsonObject.getJSONArray("features").length(); i++) {
+                    CarPark carPark = new CarPark();
+                    ArrayList coordinates = new ArrayList();
+                    JSONObject properties = jsonObject.getJSONArray("features").getJSONObject(i).getJSONObject("properties");
+
+                    carPark.setName(properties.getString("DESCRIPTIO"));
+                    JSONArray geometry = jsonObject.getJSONArray("features").getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0);
+
+                    for (int j = 0; j < geometry.length(); j++) {
+                        coordinates.add(new LatLng((double) geometry.getJSONArray(j).get(1), (double) geometry.getJSONArray(j).get(0)));
+                    }
+
+                    carPark.setCoordinates(coordinates);
+                    carPark.setWebPage(properties.getString("WEBSITE2"));
+                    carPark.setAddress(properties.getString("LV_DETAILS"));
+                    carPark.setFreeSpacesKnown(true);
+
+                    Random r = new Random();
+                    carPark.setFreeSpacesNumber(r.nextInt(100));
+
+                    carParks.add(carPark);
+                }
+            } catch (Exception e) {
+
+            }
+
+            drawCarParkLines();
+            addMapMarkers();
         }
     }
 }
