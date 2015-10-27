@@ -1,6 +1,7 @@
 package com.example.mary.carparkdemo1;
 
 import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.io.Serializable;
 
@@ -15,13 +16,24 @@ public class CarPark implements Serializable {
     private ArrayList<LatLng> coordinates;
     private int freeSpacesNumber;
     private boolean freeSpacesKnown;
+    private int totalSpaces;
 
-    public CarPark(){
+
+    public CarPark() {
 
     }
 
+    public int getTotalSpaces() {
+        return totalSpaces;
+    }
 
-    public String getName() {return name;
+    public void setTotalSpaces(int totalSpaces) {
+        this.totalSpaces = totalSpaces;
+    }
+
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
@@ -68,17 +80,16 @@ public class CarPark implements Serializable {
         this.freeSpacesKnown = freeSpacesKnown;
     }
 
-    public LatLng getMidPointLocation()
-    {
+    public LatLng getMidPointLocation() {
         double totalLat = 0;
         double totalLng = 0;
 
-        for (LatLng c: coordinates){
+        for (LatLng c : coordinates) {
             totalLat += c.latitude;
             totalLng += c.longitude;
         }
 
-        return new LatLng(totalLat/coordinates.size(),totalLng/coordinates.size());
+        return new LatLng(totalLat / coordinates.size(), totalLng / coordinates.size());
     }
 }
 

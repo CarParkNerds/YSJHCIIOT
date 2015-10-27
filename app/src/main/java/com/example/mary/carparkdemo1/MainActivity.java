@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
 
                     View v = getLayoutInflater().inflate(R.layout.info_window, null);
 
-
                     TextView winTitle = (TextView) v.findViewById(R.id.winTitle);
                     winTitle.setText(marker.getTitle());
 

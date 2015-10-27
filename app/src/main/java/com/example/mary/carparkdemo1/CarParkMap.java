@@ -156,7 +156,6 @@ public class CarParkMap extends AppCompatActivity {
 
         for (CarPark carPark : carParks) {
             LatLng previousPos = null;
-            Log.e("Car park coord", "" + carPark.getCoordinates().size());
             for (LatLng coordinates : carPark.getCoordinates()) {
                 if (previousPos == null) {
                     previousPos = new LatLng(coordinates.latitude, coordinates.longitude);
@@ -207,7 +206,7 @@ public class CarParkMap extends AppCompatActivity {
             googleMap.addMarker(new MarkerOptions()
                     .position(carPark.getMidPointLocation())
                     .title(carPark.getName())
-                    .snippet("Free Spaces: " + spacesText + "\n\nAddress: " + carPark.getAddress())
+                    .snippet("Free Spaces: " + spacesText +"/" + carPark.getTotalSpaces()+ "\n\nAddress: " + carPark.getAddress())
                     .icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
                     .draggable(false));
         }
@@ -287,7 +286,13 @@ public class CarParkMap extends AppCompatActivity {
                     carPark.setFreeSpacesKnown(true);
 
                     Random r = new Random();
-                    carPark.setFreeSpacesNumber(r.nextInt(100));
+                    int free = r.nextInt(100);
+                    carPark.setFreeSpacesNumber(free);
+                    carPark.setTotalSpaces(((r.nextInt(300) + free)+4)/5*5);
+
+
+
+
 
                     carParks.add(carPark);
                 }

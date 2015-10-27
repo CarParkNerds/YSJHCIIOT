@@ -9,7 +9,6 @@ import android.widget.TextView;
 public class CarParkInfo extends AppCompatActivity {
 
     private WebView webView;
-    private CarPark carPark;
     private TextView spacesMessage;
 
     @Override
