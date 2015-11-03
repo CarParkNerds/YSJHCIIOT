@@ -23,8 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     List<CarPark> carParks = new ArrayList<>();
 
-//    List<CarPark> CarParksOnMap = new ArrayList<CarPark>();
-
     GoogleMap googleMap;
 
     // somewhere in teh middle of York

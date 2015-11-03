@@ -54,7 +54,6 @@ public class CarParkMap extends AppCompatActivity {
     }
 
 
-
     // create the google map
     private void createMapView() {
 
@@ -152,7 +151,7 @@ public class CarParkMap extends AppCompatActivity {
     // add markers to the map
     // markers show the number of free spaces, and are coloured according to the number of free spaces
 
-    private void drawCarParkLines(){
+    private void drawCarParkLines() {
 
         for (CarPark carPark : carParks) {
             LatLng previousPos = null;
@@ -206,7 +205,7 @@ public class CarParkMap extends AppCompatActivity {
             googleMap.addMarker(new MarkerOptions()
                     .position(carPark.getMidPointLocation())
                     .title(carPark.getName())
-                    .snippet("Free Spaces: " + spacesText +"/" + carPark.getTotalSpaces()+ "\n\nAddress: " + carPark.getAddress())
+                    .snippet("Free Spaces: " + spacesText + "/" + carPark.getTotalSpaces() + "\n\nAddress: " + carPark.getAddress())
                     .icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
                     .draggable(false));
         }
@@ -268,14 +267,18 @@ public class CarParkMap extends AppCompatActivity {
             JSONObject jsonObject;
             try {
                 jsonObject = new JSONObject(result);
-                for (int i = 0; i < jsonObject.getJSONArray("features").length(); i++) {
+                JSONArray features = jsonObject.getJSONArray("features");
+
+                //Access every car park
+                for (int i = 0; i < features.length(); i++) {
                     CarPark carPark = new CarPark();
                     ArrayList coordinates = new ArrayList();
-                    JSONObject properties = jsonObject.getJSONArray("features").getJSONObject(i).getJSONObject("properties");
+                    JSONObject properties = features.getJSONObject(i).getJSONObject("properties");
 
                     carPark.setName(properties.getString("DESCRIPTIO"));
-                    JSONArray geometry = jsonObject.getJSONArray("features").getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0);
 
+                    //Access all the co ordinates and add to arraylist
+                    JSONArray geometry = features.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0);
                     for (int j = 0; j < geometry.length(); j++) {
                         coordinates.add(new LatLng((double) geometry.getJSONArray(j).get(1), (double) geometry.getJSONArray(j).get(0)));
                     }
@@ -285,14 +288,14 @@ public class CarParkMap extends AppCompatActivity {
                     carPark.setAddress(properties.getString("LV_DETAILS"));
                     carPark.setFreeSpacesKnown(true);
 
+
+                    //Generate random number of free spaces
                     Random r = new Random();
                     int free = r.nextInt(100);
                     carPark.setFreeSpacesNumber(free);
-                    carPark.setTotalSpaces(((r.nextInt(300) + free)+4)/5*5);
 
-
-
-
+                    //Set total spaces to be round number greater than free spaces and rounded to 5
+                    carPark.setTotalSpaces(((r.nextInt(300) + free) + 4) / 5 * 5);
 
                     carParks.add(carPark);
                 }

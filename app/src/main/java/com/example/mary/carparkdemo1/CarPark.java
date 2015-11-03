@@ -80,6 +80,7 @@ public class CarPark implements Serializable {
         this.freeSpacesKnown = freeSpacesKnown;
     }
 
+    //Calculate the midpoint of the car park by getting the average of the coordinates
     public LatLng getMidPointLocation() {
         double totalLat = 0;
         double totalLng = 0;
