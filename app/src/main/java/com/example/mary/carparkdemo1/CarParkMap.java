@@ -85,7 +85,7 @@ public class CarParkMap extends AppCompatActivity {
             getData get = new getData();
             get.execute("http://data.cyc.opendata.arcgis.com/datasets/601ef57b2c7449b19630a3e243fc5293_4.geojson");
 
-            // add the bus CarPark markers
+            // add the CarPark markers
             addMapMarkers();
 
 

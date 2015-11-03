@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // create map and add content
+        // create map and add content
         createMapView();
         addMapContent();
 
@@ -58,9 +58,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // put the bus CarPark markers onto the map
-    // centre on default location
-    // listne for marker clicks and map moves
+    // put the CarPark markers onto the map centre on default location listen for marker clicks and map moves
 
     private void addMapContent() {
 
@@ -72,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-             // move map to default Location in centre of York
+            // move map to default Location in centre of York
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 14));
 
             // add the google location button, allowing user to return map to current location
@@ -123,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-
                 }
             });
 
@@ -138,44 +135,36 @@ public class MainActivity extends AppCompatActivity {
 
             if (carPark.isFreeSpacesKnown()) {
 
-                if (carPark.getFreeSpacesNumber() < 10)
-                {
+                if (carPark.getFreeSpacesNumber() < 10) {
                     googleMap.addMarker(new MarkerOptions()
                             .position(carPark.getMidPointLocation())
                             .title(carPark.getName())
-                                    // this needs fixing as ass text shown on one line
                             .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                             .draggable(false));
                 }
                 if (carPark.getFreeSpacesNumber() >= 10 &&
-                        carPark.getFreeSpacesNumber() < 30)
-                {
+                        carPark.getFreeSpacesNumber() < 30) {
                     googleMap.addMarker(new MarkerOptions()
                             .position(carPark.getMidPointLocation())
                             .title(carPark.getName())
-                                    // this needs fixing as ass text shown on one line
                             .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                             .draggable(false));
                 }
-                if (carPark.getFreeSpacesNumber() >= 30)
-                {
+                if (carPark.getFreeSpacesNumber() >= 30) {
                     googleMap.addMarker(new MarkerOptions()
                             .position(carPark.getMidPointLocation())
                             .title(carPark.getName())
-                                    // this needs fixing as ass text shown on one line
                             .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                             .draggable(false));
                 }
 
-            } else
-            {
+            } else {
                 googleMap.addMarker(new MarkerOptions()
                         .position(carPark.getMidPointLocation())
                         .title(carPark.getName())
-                                // this needs fixing as ass text shown on one line
                         .snippet("Free Spaces: unknown\n\nAddress: " + carPark.getAddress())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                         .draggable(false));
