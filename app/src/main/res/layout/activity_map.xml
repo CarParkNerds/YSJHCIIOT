@@ -6,6 +6,11 @@
     android:orientation="vertical"
     >
 
+
+    <include android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"
+        />
+
     <fragment
         android:id="@+id/mapView"
         android:name="com.google.android.gms.maps.MapFragment"

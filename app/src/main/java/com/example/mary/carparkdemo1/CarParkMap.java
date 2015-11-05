@@ -7,9 +7,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +42,9 @@ public class CarParkMap extends AppCompatActivity {
     List<CarPark> carParks = new ArrayList<>();
 
     GoogleMap googleMap;
+    getData get;
+    private Toolbar toolbar;
+
 
     // somewhere in teh middle of York
     LatLng DEFAULT_LOCATION = new LatLng(53.9583, -1.0803);
@@ -47,10 +53,39 @@ public class CarParkMap extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+
+
         // create map and add content
         createMapView();
         addMapContent();
 
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                googleMap.clear();
+                // User chose the "Settings" item, show the app settings UI...
+                for (CarPark carPark : carParks) {
+                    get.generateSpaces(carPark);
+                }
+                addMapMarkers();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 
@@ -72,7 +107,7 @@ public class CarParkMap extends AppCompatActivity {
         }
     }
 
-    // put the bus CarPark markers onto the map
+    // put the CarPark markers onto the map
     // centre on default location
     // set up customised info window
     // listen for info window clicks
@@ -82,7 +117,7 @@ public class CarParkMap extends AppCompatActivity {
         /** Make sure that the map has been initialised **/
         if (null != googleMap) {
 
-            getData get = new getData();
+            get = new getData();
             get.execute("http://data.cyc.opendata.arcgis.com/datasets/601ef57b2c7449b19630a3e243fc5293_4.geojson");
 
             // add the CarPark markers
@@ -170,8 +205,8 @@ public class CarParkMap extends AppCompatActivity {
 
     private void addMapMarkers() {
 
-        String iconText = "";
-        String spacesText = "";
+        String iconText;
+        String spacesText;
         IconGenerator ig = new IconGenerator(this);
 
         for (CarPark carPark : carParks) {
@@ -286,16 +321,9 @@ public class CarParkMap extends AppCompatActivity {
                     carPark.setCoordinates(coordinates);
                     carPark.setWebPage(properties.getString("WEBSITE2"));
                     carPark.setAddress(properties.getString("LV_DETAILS"));
-                    carPark.setFreeSpacesKnown(true);
 
-
-                    //Generate random number of free spaces
-                    Random r = new Random();
-                    int free = r.nextInt(100);
-                    carPark.setFreeSpacesNumber(free);
-
-                    //Set total spaces to be round number greater than free spaces and rounded to 5
-                    carPark.setTotalSpaces(((r.nextInt(300) + free) + 4) / 5 * 5);
+                    //Generate whether number of spaces is known and number + total if known
+                    generateSpaces(carPark);
 
                     carParks.add(carPark);
                 }
@@ -306,5 +334,24 @@ public class CarParkMap extends AppCompatActivity {
             drawCarParkLines();
             addMapMarkers();
         }
+
+
+        private void generateSpaces(CarPark carPark) {
+            Random r = new Random();
+            int free = 50;
+            if (r.nextInt(4) == 1) {
+                carPark.setFreeSpacesKnown(false);
+            } else {
+                carPark.setFreeSpacesKnown(true);
+                free = r.nextInt(100);
+                carPark.setFreeSpacesNumber(free);
+
+            }
+            //Set total spaces to be round number greater than free spaces and rounded to 5
+            carPark.setTotalSpaces(((r.nextInt(300) + free) + 4) / 5 * 5);
+
+        }
+
+
     }
 }
