@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -132,46 +133,33 @@ public class MainActivity extends AppCompatActivity {
     private void addMapMarkers() {
 
         for (CarPark carPark : carParks) {
-
+            BitmapDescriptor colour = null;
             if (carPark.isFreeSpacesKnown()) {
 
                 if (carPark.getFreeSpacesNumber() < 10) {
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(carPark.getMidPointLocation())
-                            .title(carPark.getName())
-                            .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                            .draggable(false));
+                    colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
                 }
-                if (carPark.getFreeSpacesNumber() >= 10 &&
-                        carPark.getFreeSpacesNumber() < 30) {
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(carPark.getMidPointLocation())
-                            .title(carPark.getName())
-                            .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                            .draggable(false));
+                if (carPark.getFreeSpacesNumber() >= 10 && carPark.getFreeSpacesNumber() < 30) {
+                    colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
                 }
                 if (carPark.getFreeSpacesNumber() >= 30) {
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(carPark.getMidPointLocation())
-                            .title(carPark.getName())
-                            .snippet("Free Spaces: " + carPark.getFreeSpacesNumber() + "\n\nAddress: " + carPark.getAddress())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                            .draggable(false));
+                    colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
                 }
 
-            } else {
-                googleMap.addMarker(new MarkerOptions()
-                        .position(carPark.getMidPointLocation())
-                        .title(carPark.getName())
-                        .snippet("Free Spaces: unknown\n\nAddress: " + carPark.getAddress())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                        .draggable(false));
+            }
+            else {
+                colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
             }
 
+            googleMap.addMarker(new MarkerOptions()
+                    .position(carPark.getMidPointLocation())
+                    .title(carPark.getName())
+                    .snippet("Free Spaces: unknown\n\nAddress: " + carPark.getAddress())
+                    .icon(colour)
+                    .draggable(false));
         }
 
     }
+
 
 }
