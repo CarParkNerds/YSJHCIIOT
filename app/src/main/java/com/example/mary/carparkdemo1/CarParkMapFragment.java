@@ -5,18 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -37,74 +37,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class CarParkMap extends AppCompatActivity {
+public class CarParkMapFragment extends Fragment {
 
     List<CarPark> carParks = new ArrayList<>();
-
+    MapView mMapView;
     GoogleMap googleMap;
     getData get;
     private Toolbar toolbar;
 
 
-    // somewhere in teh middle of York
+    // Middle of York
     LatLng DEFAULT_LOCATION = new LatLng(53.9583, -1.0803);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-
-
-        // create map and add content
-        createMapView();
-        addMapContent();
-
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return true;
-    }
-
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                googleMap.clear();
-                // User chose the "Settings" item, show the app settings UI...
-                for (CarPark carPark : carParks) {
-                    get.generateSpaces(carPark);
-                }
-                addMapMarkers();
-                return true;
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // inflat and return the layout
+        View v = inflater.inflate(R.layout.fragment_map, container,
+                false);
+        mMapView = (MapView) v.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
 
-        }
-    }
-
-
-    // create the google map
-    private void createMapView() {
+        mMapView.onResume();// needed to get the map to display immediately
 
         try {
-            if (null == googleMap) {
-                googleMap = ((MapFragment) getFragmentManager().findFragmentById(
-                        R.id.mapView)).getMap();
-
-                if (null == googleMap) {
-                    Toast.makeText(getApplicationContext(),
-                            "Error creating map", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } catch (NullPointerException exception) {
-            Log.e("mapApp", exception.toString());
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        // create the google map
+        googleMap = mMapView.getMap();
+
+        // add map content
+        addMapContent();
+
+        // Perform any camera updates here
+        return v;
     }
 
     // put the CarPark markers onto the map
@@ -143,7 +113,7 @@ public class CarParkMap extends AppCompatActivity {
                 @Override
                 public View getInfoContents(Marker marker) {
 
-                    View v = getLayoutInflater().inflate(R.layout.info_window, null);
+                    View v = getActivity().getLayoutInflater().inflate(R.layout.info_window, null);
 
 
                     TextView winTitle = (TextView) v.findViewById(R.id.winTitle);
@@ -165,7 +135,7 @@ public class CarParkMap extends AppCompatActivity {
                     for (CarPark carPark : carParks) {
                         if (carPark.getMidPointLocation().equals(marker.getPosition())) {
                             Intent intent = new Intent();
-                            intent.setClass(CarParkMap.this, CarParkInfo.class);
+                            intent.setClass(getActivity(), CarParkInfo.class);
 
                             Bundle bundle = new Bundle();
 
@@ -207,7 +177,7 @@ public class CarParkMap extends AppCompatActivity {
 
         String iconText;
         String spacesText;
-        IconGenerator ig = new IconGenerator(this);
+        IconGenerator ig = new IconGenerator(getActivity());
 
         for (CarPark carPark : carParks) {
 
@@ -244,6 +214,16 @@ public class CarParkMap extends AppCompatActivity {
                     .icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
                     .draggable(false));
         }
+    }
+
+
+    public void refreshSpaces(){
+        googleMap.clear();
+        // User chose the "Settings" item, show the app settings UI...
+        for (CarPark carPark : carParks) {
+            get.generateSpaces(carPark);
+        }
+        addMapMarkers();
     }
 
     private class getData extends AsyncTask<String, Void, String> {
@@ -351,7 +331,6 @@ public class CarParkMap extends AppCompatActivity {
             carPark.setTotalSpaces(((r.nextInt(300) + free) + 4) / 5 * 5);
 
         }
-
 
     }
 }
