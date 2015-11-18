@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CarParkListFragment.OnFragmentInteractionListener {
 
     // Declaring Your View and Variables
     getData get;
@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Map", "List"};
-    int Numboftabs = 2;
+    CharSequence titles[] = {"Map", "List"};
+    int numbOfTabs = 2;
     ArrayList<CarPark> carParks = new ArrayList<>();
 
     @Override
@@ -42,14 +42,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        //Error occurring
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.mapView, new CarParkMapFragment()).commit();
+        }
+
+
+
         // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles for the Tabs and Number Of Tabs.
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numbOfTabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
@@ -107,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void onFragmentInteraction(String id){}
 
     public ArrayList<CarPark> getCarParks(){
         return carParks;

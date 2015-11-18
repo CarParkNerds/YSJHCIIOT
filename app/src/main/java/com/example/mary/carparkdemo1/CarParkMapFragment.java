@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +26,6 @@ public class CarParkMapFragment extends Fragment {
     MapView mMapView;
     GoogleMap googleMap;
 
-    private Toolbar toolbar;
-
-
     // Middle of York
     LatLng DEFAULT_LOCATION = new LatLng(53.9583, -1.0803);
 
@@ -41,7 +37,6 @@ public class CarParkMapFragment extends Fragment {
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();// needed to get the map to display immediately
-
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());

@@ -35,7 +35,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCn5nLJAMZfAxnjwr9QoYxXXLK_bq0ILzU" />
+            android:value=" AIzaSyCn5nLJAMZfAxnjwr9QoYxXXLK_bq0ILzU" />
 
         <activity
             android:name=".CarParkInfo"
