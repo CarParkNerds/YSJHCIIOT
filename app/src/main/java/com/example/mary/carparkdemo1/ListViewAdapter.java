@@ -3,16 +3,19 @@ package com.example.mary.carparkdemo1;
 /**
  * Created by michael.carr on 17/11/15.
  */
+
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.app.Activity;
+
 import java.util.List;
 
-public class ListViewAdapter extends ArrayAdapter {
+public class ListViewAdapter extends ArrayAdapter<CarPark> {
 
     private Context context;
     private boolean useList = true;
@@ -26,7 +29,9 @@ public class ListViewAdapter extends ArrayAdapter {
      * Holder for the list items.
      */
     private class ViewHolder{
-        TextView titleText;
+        TextView carParkName;
+        TextView carParkAddress;
+        TextView carParkFreeSpaces;
     }
 
     /**
@@ -36,6 +41,7 @@ public class ListViewAdapter extends ArrayAdapter {
      * @param parent
      * @return
      */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         CarPark item = (CarPark)getItem(position);
@@ -46,21 +52,22 @@ public class ListViewAdapter extends ArrayAdapter {
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            if(useList){
-                viewToUse = mInflater.inflate(R.layout.list_entry, null);
-            } else {
-                viewToUse = mInflater.inflate(R.layout.list_entry, null);
-            }
-
+            viewToUse = mInflater.inflate(R.layout.list_entry, null);
             holder = new ViewHolder();
-            holder.titleText = (TextView)viewToUse.findViewById(R.id.titleTextView);
+            holder.carParkName = (TextView)viewToUse.findViewById(R.id.carParkName);
+            holder.carParkAddress = (TextView)viewToUse.findViewById(R.id.carParkAddress);
+            holder.carParkFreeSpaces = (TextView)viewToUse.findViewById(R.id.carParkFreeSpaces);
+
             viewToUse.setTag(holder);
         } else {
             viewToUse = convertView;
             holder = (ViewHolder) viewToUse.getTag();
         }
 
-        holder.titleText.setText(item.getName());
+        Log.e("test", "putting " + item.getName() + " in for " + position);
+        holder.carParkName.setText(item.getName());
+        holder.carParkAddress.setText(item.getAddress());
+        holder.carParkFreeSpaces.setText(Integer.toString(item.getFreeSpacesNumber()) + " free spaces");
         return viewToUse;
     }
 }

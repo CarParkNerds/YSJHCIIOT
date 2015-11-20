@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
         //Error occurring
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.mapView, new CarParkMapFragment()).commit();
+         //   getSupportFragmentManager().beginTransaction().add(R.id.myMapView, new CarParkMapFragment()).commit();
         }
 
 
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 for (CarPark carPark : carParks) {
                     get.generateSpaces(carPark);
                 }
-                carParkMapFragment.addMapMarkers();
+                carParkMapFragment.addMapMarkers(carParks);
 
                 return true;
             default:
@@ -204,7 +204,9 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
 
                 }
-                adapter.getMap().addMapMarkers();
+                Log.e("test", "Data has arrived; got " + features.length());
+                adapter.getMap().addMapMarkers(carParks);
+                adapter.getList().carParksChanged();
             } catch (Exception e) {
 
             }

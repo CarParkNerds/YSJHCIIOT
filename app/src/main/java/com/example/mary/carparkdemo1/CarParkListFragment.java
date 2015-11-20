@@ -1,16 +1,15 @@
 package com.example.mary.carparkdemo1;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 
 import java.util.ArrayList;
 
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 public class CarParkListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     ListViewAdapter mAdapter;
+    // reference to MainActivity's car park list
     ArrayList<CarPark> carParks;
     private AbsListView mListView;
     private OnFragmentInteractionListener mListener;
@@ -29,30 +29,19 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
 
     }
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        carParks = ((MainActivity) getActivity()).getCarParks();
-
-        if (carParks == null)
-        {
-            Log.e("Car park","is null");
-        }
-        else{
-            Log.e("Car park", "is not null");
-        }
-        mAdapter = new ListViewAdapter(getActivity(), carParks);
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_entry, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+
+        carParks = ((MainActivity) getActivity()).getCarParks();
+        Log.e("Size of car park", carParks.size() + "");
+        mAdapter = new ListViewAdapter(getActivity(), carParks);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView = (AbsListView) view.findViewById(R.id.carParkList);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -101,6 +90,12 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
         startActivity(intent);
 
     }
+
+    public void carParksChanged()
+    {
+        mAdapter.notifyDataSetChanged();
+    }
+
 
 }
 

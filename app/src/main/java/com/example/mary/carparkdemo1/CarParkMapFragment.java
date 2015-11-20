@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 
+import java.util.ArrayList;
+
 public class CarParkMapFragment extends Fragment {
 
     MapView mMapView;
@@ -29,12 +31,13 @@ public class CarParkMapFragment extends Fragment {
     // Middle of York
     LatLng DEFAULT_LOCATION = new LatLng(53.9583, -1.0803);
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // inflate and return the layout
+
         View v = inflater.inflate(R.layout.fragment_map, container,false);
-        mMapView = (MapView) v.findViewById(R.id.mapView);
+
+        mMapView = (MapView) v.findViewById(R.id.myMapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();// needed to get the map to display immediately
 
@@ -46,8 +49,6 @@ public class CarParkMapFragment extends Fragment {
 
         // create the google map
         googleMap = mMapView.getMap();
-
-
 
         // add map content
         addMapContent();
@@ -148,13 +149,13 @@ public class CarParkMapFragment extends Fragment {
     }
 
 
-    public void addMapMarkers() {
+    public void addMapMarkers(ArrayList<CarPark> carParks) {
 
         String iconText;
         String spacesText;
         IconGenerator ig = new IconGenerator(getActivity());
 
-        for (CarPark carPark : ((MainActivity)getActivity()).getCarParks()) {
+        for (CarPark carPark : carParks) {
 
             // set icon text and colour depending on number of free spaces
             if (carPark.isFreeSpacesKnown()) {
