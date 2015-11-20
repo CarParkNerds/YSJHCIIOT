@@ -6,7 +6,6 @@ package com.example.mary.carparkdemo1;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +62,6 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
             viewToUse = convertView;
             holder = (ViewHolder) viewToUse.getTag();
         }
-
-        Log.e("test", "putting " + item.getName() + " in for " + position);
         holder.carParkName.setText(item.getName());
         holder.carParkAddress.setText(item.getAddress());
         holder.carParkFreeSpaces.setText(Integer.toString(item.getFreeSpacesNumber()) + " free spaces");

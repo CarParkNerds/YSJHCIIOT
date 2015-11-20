@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                     get.generateSpaces(carPark);
                 }
                 carParkMapFragment.addMapMarkers(carParks);
-
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

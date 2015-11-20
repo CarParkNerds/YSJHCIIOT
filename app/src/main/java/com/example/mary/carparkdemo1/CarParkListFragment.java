@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
 
 
         carParks = ((MainActivity) getActivity()).getCarParks();
-        Log.e("Size of car park", carParks.size() + "");
         mAdapter = new ListViewAdapter(getActivity(), carParks);
 
         // Set the adapter
@@ -65,9 +63,6 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
         super.onDetach();
         mListener = null;
     }
-
-
-
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
@@ -90,7 +85,6 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
         startActivity(intent);
 
     }
-
     public void carParksChanged()
     {
         mAdapter.notifyDataSetChanged();
