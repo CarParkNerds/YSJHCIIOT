@@ -56,10 +56,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
             //   getSupportFragmentManager().beginTransaction().add(R.id.myMapView, new CarParkMapFragment()).commit();
         }
 
-
-
         // Creating The Toolbar and setting it as the Toolbar for the activity
-
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);

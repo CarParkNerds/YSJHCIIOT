@@ -6,6 +6,8 @@ package com.example.mary.carparkdemo1;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,13 +45,12 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        CarPark item = (CarPark)getItem(position);
+        CarPark carPark = (CarPark) getItem(position);
         View viewToUse = null;
 
         // This block exists to inflate the settings list item conditionally based on whether
         // we want to support a grid or list view.
-        LayoutInflater mInflater = (LayoutInflater) context
-                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             viewToUse = mInflater.inflate(R.layout.list_entry, null);
             holder = new ViewHolder();
@@ -62,9 +63,29 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
             viewToUse = convertView;
             holder = (ViewHolder) viewToUse.getTag();
         }
-        holder.carParkName.setText(item.getName());
-        holder.carParkAddress.setText(item.getAddress());
-        holder.carParkFreeSpaces.setText(Integer.toString(item.getFreeSpacesNumber()) + " free spaces");
+        CardView cardView = (CardView) viewToUse.findViewById(R.id.card_view);
+        if (carPark.getFreeSpacesNumber() < 10 && carPark.isFreeSpacesKnown()) {
+            cardView.setBackgroundColor(Color.rgb(204, 0, 0));
+        }
+        if (carPark.getFreeSpacesNumber() >= 10 &&
+                carPark.getFreeSpacesNumber() < 30) {
+            cardView.setBackgroundColor(Color.rgb(255, 165, 0));
+        }
+        if (carPark.getFreeSpacesNumber() >= 30) {
+            cardView.setBackgroundColor(Color.rgb(102, 153, 0));
+        }
+        if (carPark.isFreeSpacesKnown() == false) {
+            cardView.setBackgroundColor(Color.rgb(0, 153, 204));
+        }
+        holder.carParkName.setText(carPark.getName());
+        holder.carParkAddress.setText(carPark.getAddress());
+
+
+        if (carPark.isFreeSpacesKnown()) {
+            holder.carParkFreeSpaces.setText(Integer.toString(carPark.getFreeSpacesNumber()) + " free spaces");
+        } else {
+            holder.carParkFreeSpaces.setText("Unknown");
+        }
         return viewToUse;
     }
 }

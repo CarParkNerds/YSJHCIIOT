@@ -1,15 +1,24 @@
 package com.example.mary.carparkdemo1;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class CarParkInfo extends AppCompatActivity {
 
     private WebView webView;
     private TextView spacesMessage;
+    private Button directionsButton;
+    private double lat, lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,16 +26,26 @@ public class CarParkInfo extends AppCompatActivity {
         setContentView(R.layout.activity_car_park_info);
 
         Bundle bundle = this.getIntent().getExtras();
-        int spaces = (int) bundle.getSerializable("spaces");
-        String website = (String) bundle.getSerializable("website");
+        CarPark carPark = (CarPark) bundle.getSerializable("car_park");
+        int spaces = bundle.getInt("spaces");
+        boolean known = bundle.getBoolean("known");
+        String website = bundle.getString("website");
+        lat = bundle.getDouble("lat");
+        lng = bundle.getDouble("lng");
 
-        // show number of free spaces
-        spacesMessage = (TextView) findViewById(R.id.spacesMsg);
-        spacesMessage.setText("Free Spaces: " + spaces);
+        Toolbar toolbar;
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
 
-
-
-
+        toolbar.setTitleTextColor(Color.WHITE);
+        // show number of free spaces (show "unknown" if not known)
+        if (known) {
+            toolbar.setTitle("Free Spaces: " + spaces);
+        } else {
+            toolbar.setTitle("Free Spaces: Unknown");
+        }
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // display council car park directory web page for this car park
         webView = (WebView) findViewById(R.id.webView1);
@@ -36,4 +55,31 @@ public class CarParkInfo extends AppCompatActivity {
         webView.loadUrl(website);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_navigate) {
+            //start google directions going from current location to car park
+            String url = "http://maps.google.com/maps?mode=driving&saddr=&daddr=" + lat + "," + lng;
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+            startActivity(intent);
+
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 }
+
+
+
+
+
+

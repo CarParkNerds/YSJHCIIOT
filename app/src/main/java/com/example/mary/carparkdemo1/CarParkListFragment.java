@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -79,8 +81,12 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
 
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable("spaces", carPark.getFreeSpacesNumber());
-        bundle.putSerializable("website", carPark.getWebPage());
+        bundle.putInt("spaces", carPark.getFreeSpacesNumber());
+        bundle.putBoolean("known", carPark.isFreeSpacesKnown());
+        bundle.putString("website", carPark.getWebPage());
+        LatLng latlng = carPark.getMidPointLocation();
+        bundle.putDouble("lat", latlng.latitude);
+        bundle.putDouble("lng", latlng.longitude);
         intent.putExtras(bundle);
 
         startActivity(intent);

@@ -118,8 +118,12 @@ public class CarParkMapFragment extends Fragment {
 
                             Bundle bundle = new Bundle();
 
-                            bundle.putSerializable("spaces", carPark.getFreeSpacesNumber());
-                            bundle.putSerializable("website", carPark.getWebPage());
+                            bundle.putInt("spaces", carPark.getFreeSpacesNumber());
+                            bundle.putBoolean("known", carPark.isFreeSpacesKnown());
+                            bundle.putString("website", carPark.getWebPage());
+                            LatLng latlng = carPark.getMidPointLocation();
+                            bundle.putDouble("lat", latlng.latitude);
+                            bundle.putDouble("lng", latlng.longitude);
                             intent.putExtras(bundle);
 
                             startActivity(intent);
