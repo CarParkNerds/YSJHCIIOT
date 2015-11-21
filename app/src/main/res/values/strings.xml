@@ -4,7 +4,7 @@
     <string name="title_activity_help">Help</string>
 
     <string name="title_activity_car_park_info">CarParkInfo</string>
-    <string name="AboutInfo">The car park names and locations are obtained from York Open Data:/\n http://data.yorkopendata.org/\n(Contains public sector information licensed under the Open Government Licence v2.0.:/\n  http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/)\n\nAdditional information is obtained from the York Council Car Parks Directory:/\n  https://www.york.gov.uk/directory/14/car_parks_directory</string>
+    <string name="AboutInfo">The car park names and locations are obtained from York Open Data:\nhttp://data.yorkopendata.org/\n(Contains public sector information licensed under the Open Government Licence v2.0.:\nhttp://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/)\n\nAdditional information is obtained from the York Council Car Parks Directory:\nhttps://www.york.gov.uk/directory/14/car_parks_directory</string>
     <string name="appFunction">This app shows you the number of empty spaces in York Council car parks.\n\nYou can choose to show the car parks on a map or on a list. Click the headings at the top of the screen to switch between them.\n\nWhen the app starts, it shows the number of empty spaces. As these numbers will change as people enter or leave the car park, you can update this information by clicking the refresh (circle/arrow) icon at the top right of the screen.
     </string>
 
@@ -13,7 +13,7 @@
     Orange - 10-29 empty spaces\n\n
     Green - 30 or more empty spaces\n\n
     Blue - number of empty spaces unknown
-    \n\nTouch a marker to see the car park\'s name and address, and touch again to see additional information such as costs and opening times and to get directions to the car park from your current location. You can also get directions by clicking the blue icon with the arrow at the bottom right of the screen.
+    \n\nTouch a marker to see the car park\'s name and address, and touch again to see additional information such as costs and opening times and to get directions to the car park from your current location. You can also get directions by clicking the blue icon with the arrow at the bottom right of the screen.\n\n
     </string>
     <string name="listFunction">This shows all the car parks in alphabetical order. Touch a car park entry to see additional information such as costs and opening hours, and to get directions.\n\nTo sort the list by name, distance from current location or number of empty spaces, click on the sort (three horizontal lines) icon at the top right of the screen.</string>
 

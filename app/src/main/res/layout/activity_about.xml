@@ -4,17 +4,16 @@
     android:orientation="vertical" >
 
 
-
-
-    <TextView android:text="@string/app_name"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"
         android:layout_height="wrap_content"
-
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
         />
 
-    <TextView android:text="@string/AboutInfo"
+    <TextView
+        android:layout_margin="10sp"
+        android:text="@string/AboutInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoLink="web"
