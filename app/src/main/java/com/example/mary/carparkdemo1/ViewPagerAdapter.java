@@ -3,6 +3,7 @@ package com.example.mary.carparkdemo1;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 /**
  * Created by hp1 on 21-01-2015.
@@ -38,11 +39,13 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         if(position == 0) // if the position is 0 we are returning the First tab
         {
             carParkMapFragment = new CarParkMapFragment();
+            Log.e("Map" , "on start");
             return carParkMapFragment;
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
             carParkListFragment = new CarParkListFragment();
+            Log.e("List", "on start");
             return carParkListFragment;
         }
 

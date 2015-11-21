@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by Mary on 17/10/2015.
  */
-public class CarPark implements Serializable {
+public class CarPark implements Serializable, Comparable<CarPark> {
 
     private String name;
     private String address;
@@ -17,7 +17,7 @@ public class CarPark implements Serializable {
     private int freeSpacesNumber;
     private boolean freeSpacesKnown;
     private int totalSpaces;
-
+    private float distanceFromLocation;
 
     public CarPark() {
 
@@ -80,6 +80,16 @@ public class CarPark implements Serializable {
         this.freeSpacesKnown = freeSpacesKnown;
     }
 
+
+    public float getDistanceFromLocation() {
+        return distanceFromLocation;
+    }
+
+    public void setDistanceFromLocation(float distanceFromLocation) {
+        this.distanceFromLocation = distanceFromLocation;
+    }
+
+
     //Calculate the midpoint of the car park by getting the average of the coordinates
     public LatLng getMidPointLocation() {
         double totalLat = 0;
@@ -92,5 +102,11 @@ public class CarPark implements Serializable {
 
         return new LatLng(totalLat / coordinates.size(), totalLng / coordinates.size());
     }
+
+    @Override
+    public int compareTo(CarPark another) {
+        return 0;
+    }
+
 }
 

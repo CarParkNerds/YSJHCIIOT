@@ -62,6 +62,9 @@ public class CarParkMapFragment extends Fragment {
     // set up customised info window
     // listen for info window clicks
 
+
+
+
     public void addMapContent() {
 
         /** Make sure that the map has been initialised **/

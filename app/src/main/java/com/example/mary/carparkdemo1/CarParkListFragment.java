@@ -33,7 +33,6 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-
         carParks = ((MainActivity) getActivity()).getCarParks();
         mAdapter = new ListViewAdapter(getActivity(), carParks);
 
@@ -50,6 +49,8 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {

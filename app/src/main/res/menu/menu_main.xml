@@ -2,18 +2,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
-    <item
-        android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_refresh_black_24dp"
+    <item android:id="@+id/action_refresh" android:icon="@drawable/ic_refresh_black_24dp"
         android:title="Refresh"
-        app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/help_item"
-        android:title="@string/title_activity_help"
-        android:orderInCategory="100"
-        app:showAsAction="never"/>
-    <item android:id="@+id/about_item"
-        android:title="About"
-        android:orderInCategory="200"
-        app:showAsAction="never"/>
+
+        app:showAsAction="ifRoom" />
+
+
+    <group android:id="@+id/sortGroup">
+        <item android:icon="@drawable/ic_sort_black_24dp" android:title="Sort"
+            app:showAsAction="ifRoom">
+            <menu>
+                <item android:id="@+id/menuSortAlphabetical" android:title="Sort by name" />
+                <item android:id="@+id/menuSortDistance" android:title="Sort by distance" />
+                <item android:id="@+id/menuSortSpaces" android:title="Sort by free spaces" />"
+
+            </menu>
+        </item>
+    </group>
+
+    <item android:id="@+id/help_item" android:orderInCategory="100"
+        android:title="@string/title_activity_help" app:showAsAction="never" />
+    <item android:id="@+id/about_item" android:orderInCategory="200" android:title="About"
+        app:showAsAction="never" />
 </menu>

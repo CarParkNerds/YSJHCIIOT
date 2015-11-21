@@ -1,6 +1,7 @@
 package com.example.mary.carparkdemo1;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -22,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -36,12 +38,13 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
     CharSequence titles[] = {"Map", "List"};
     int numbOfTabs = 2;
     ArrayList<CarPark> carParks = new ArrayList<>();
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        showOverflowMenu(false);
 
         //Error occurring
         if (savedInstanceState == null) {
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -97,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         CarParkMapFragment carParkMapFragment = adapter.getMap();
 
         switch (item.getItemId()) {
@@ -123,12 +128,42 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 intent3.setClass(MainActivity.this, AboutActivity.class);
                 startActivity(intent3);
                 return true;
+            case R.id.menuSortAlphabetical:
+                Collections.sort(carParks, new NameSorter());
+                adapter.getList().mAdapter.notifyDataSetChanged();
+                Log.e("Sorted by", "name");
+                return true;
+            case R.id.menuSortDistance:
+                Location myLocation = carParkMapFragment.googleMap.getMyLocation();
+                float results[] = new float[1];
+                for (CarPark c : carParks) {
+                    LatLng carParkLocation = c.getMidPointLocation();
+                    Location.distanceBetween(carParkLocation.latitude,carParkLocation.longitude,myLocation.getLatitude(),myLocation.getLongitude(),results);
+                    c.setDistanceFromLocation(results[0]);
+               }
+                Collections.sort(carParks, new DistanceSorter());
+                adapter.getList().mAdapter.notifyDataSetChanged();
+                Log.e("Sorted by", "distance");
+                return true;
+            case R.id.menuSortSpaces:
+                Collections.sort(carParks, new SpacesSorter());
+                adapter.getList().mAdapter.notifyDataSetChanged();
+                Log.e("Sorted by", "free spaces");
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void showOverflowMenu(boolean showMenu){
+        if(menu == null)
+            return;
+        menu.setGroupVisible(R.id.sortGroup, showMenu);
+    }
+
 
     public void onFragmentInteraction(String id){}
 
@@ -219,7 +254,8 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
 
                 }
-                Log.e("test", "Data has arrived; got " + features.length());
+                //Sort car park list alphabetically
+                Collections.sort(carParks, new NameSorter());
                 adapter.getMap().addMapMarkers(carParks);
                 adapter.getList().carParksChanged();
             } catch (Exception e) {
