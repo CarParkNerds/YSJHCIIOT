@@ -1,4 +1,6 @@
-package com.example.mary.carparkdemo1;
+package com.example.mary.carparkdemo1.SortingClasses;
+
+import com.example.mary.carparkdemo1.CarPark;
 
 import java.util.Comparator;
 

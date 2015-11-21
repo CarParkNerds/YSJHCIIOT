@@ -1,4 +1,4 @@
-package com.example.mary.carparkdemo1;
+package com.example.mary.carparkdemo1.SlidingLayout;
 
 /*
  * Copyright 2014 Google Inc. All rights reserved.

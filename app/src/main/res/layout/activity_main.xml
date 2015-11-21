@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         />
 
-    <com.example.mary.carparkdemo1.SlidingTabLayout
+    <com.example.mary.carparkdemo1.SlidingLayout.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
