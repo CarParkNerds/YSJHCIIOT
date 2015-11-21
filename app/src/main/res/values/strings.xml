@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Car Park Occupancy</string>
-    <string name="action_about">About</string>
-    <string name="action_help">Help</string>
+    <string name="title_activity_about">About</string>
+    <string name="title_activity_help">Help</string>
 
     <string name="title_activity_car_park_info">CarParkInfo</string>
+    <string name="AboutInfo">The car park names and locations are obtained from York Open Data:/\n http://data.yorkopendata.org/\n(Contains public sector information licensed under the Open Government Licence v2.0.:/\n  http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/)\n\nAdditional information is obtained from the York Council Car Parks Directory:/\n  https://www.york.gov.uk/directory/14/car_parks_directory</string>
+
 </resources>

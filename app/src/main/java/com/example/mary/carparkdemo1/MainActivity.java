@@ -1,5 +1,6 @@
 package com.example.mary.carparkdemo1;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
         //Error occurring
         if (savedInstanceState == null) {
-         //   getSupportFragmentManager().beginTransaction().add(R.id.myMapView, new CarParkMapFragment()).commit();
+            //   getSupportFragmentManager().beginTransaction().add(R.id.myMapView, new CarParkMapFragment()).commit();
         }
 
 
@@ -105,7 +106,22 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 for (CarPark carPark : carParks) {
                     get.generateSpaces(carPark);
                 }
+
                 carParkMapFragment.addMapMarkers(carParks);
+                adapter.getList().carParksChanged();
+                return true;
+
+            // show the Help screen
+            case R.id.help_item:
+                Intent intent2 = new Intent();
+                intent2.setClass(MainActivity.this, HelpActivity.class);
+                startActivity(intent2);
+                return true;
+            // show the About screen
+            case R.id.about_item:
+                Intent intent3 = new Intent();
+                intent3.setClass(MainActivity.this, AboutActivity.class);
+                startActivity(intent3);
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
