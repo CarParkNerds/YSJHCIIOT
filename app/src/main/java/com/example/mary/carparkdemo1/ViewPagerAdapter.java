@@ -3,20 +3,21 @@ package com.example.mary.carparkdemo1;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
-/**
- * Created by hp1 on 21-01-2015.
- */
+
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
     CarParkMapFragment carParkMapFragment;
     CarParkListFragment carParkListFragment;
+    FragmentManager fragmentManager;
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
     public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
         super(fm);
+        this.fragmentManager = fm;
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
 
@@ -30,6 +31,17 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         return carParkListFragment;
     }
 
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        if (position == 0) {
+            carParkMapFragment = (CarParkMapFragment) fragment;
+        } else {
+            carParkListFragment = (CarParkListFragment) fragment;
+        }
+        return fragment;
+    }
+
 
     //This method return the fragment for the every position in the View Pager
     @Override
@@ -37,13 +49,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            carParkMapFragment = new CarParkMapFragment();
-            return carParkMapFragment;
+             return new CarParkMapFragment();
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            carParkListFragment = new CarParkListFragment();
-            return carParkListFragment;
+            return new CarParkListFragment();
         }
 
     }

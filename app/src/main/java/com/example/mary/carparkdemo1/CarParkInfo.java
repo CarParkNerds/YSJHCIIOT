@@ -10,14 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.TextView;
 
 public class CarParkInfo extends AppCompatActivity {
 
-    private WebView webView;
-    private TextView spacesMessage;
-    private Button directionsButton;
     private double lat, lng;
 
     @Override
@@ -26,7 +21,6 @@ public class CarParkInfo extends AppCompatActivity {
         setContentView(R.layout.activity_car_park_info);
 
         Bundle bundle = this.getIntent().getExtras();
-        CarPark carPark = (CarPark) bundle.getSerializable("car_park");
         int spaces = bundle.getInt("spaces");
         boolean known = bundle.getBoolean("known");
         String website = bundle.getString("website");
@@ -44,11 +38,14 @@ public class CarParkInfo extends AppCompatActivity {
             toolbar.setTitle("Free Spaces: Unknown");
         }
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
 
         // display council car park directory web page for this car park
-        webView = (WebView) findViewById(R.id.webView1);
+        WebView webView = (WebView) findViewById(R.id.webView1);
         webView.setWebViewClient(new WebViewClient());      // this forces it to open in the app not in a separate browser
         webView.getSettings().setJavaScriptEnabled(true);
 
@@ -64,18 +61,20 @@ public class CarParkInfo extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_navigate) {
-            //start google directions going from current location to car park
-            String url = "http://maps.google.com/maps?mode=driving&saddr=&daddr=" + lat + "," + lng;
-            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
-            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-            startActivity(intent);
-
-        } else {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    onBackPressed();
+                    return true;
+                case R.id.action_navigate:
+                    //start google directions going from current location to car park
+                    String url = "http://maps.google.com/maps?mode=driving&saddr=&daddr=" + lat + "," + lng;
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                    startActivity(intent);
+                    return true;
+                }
             return super.onOptionsItemSelected(item);
         }
-        return true;
-    }
 }
 
 

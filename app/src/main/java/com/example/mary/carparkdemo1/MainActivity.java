@@ -48,13 +48,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("Test", "on create called");
+
         setContentView(R.layout.activity_main);
         showOverflowMenu(false);
-
-        //Error occurring
-        if (savedInstanceState == null) {
-            //   getSupportFragmentManager().beginTransaction().add(R.id.myMapView, new CarParkMapFragment()).commit();
-        }
 
         // Creating The Toolbar and setting it as the Toolbar for the activity
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -76,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
             @Override
             public void onPageSelected(int position) {
+                if (menu == null) {
+                    return;
+                }
+
                 if (position == 1) {
                     menu.setGroupVisible(R.id.sortGroup, true);
                 } else if (position == 0) {
@@ -110,6 +111,20 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
     }
 
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.e("Test", "on resume called");
+    }
+
+
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Log.e("Test", "on destroy called");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -190,7 +205,12 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
     public float getDistanceFrom(CarPark carPark) {
         float results[] = new float[1];
 
+        if (adapter.getList() == null) {
+            return 0;
+        }
+
         Location myLocation = adapter.getList().mCurrentLocation;
+
         if (myLocation == null){
             return 0;
         }
@@ -226,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
         //Downloads the data from the URL requested
         private String downloadUrl(String strUrl) throws IOException {
+            Log.e("Test", "download url");
             String data = "";
             URL url = new URL(strUrl);
             // Creating an http connection to communicate with url
@@ -236,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
             try {
                 // Reading data from url
                 BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
 
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -246,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 br.close();
 
             } catch (Exception e) {
-
+                Log.e("Cannot read data", "from DownloadURL");
             } finally {
                 urlConnection.disconnect();
                 if (iStream != null) {
@@ -268,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 //Access every car park
                 for (int i = 0; i < features.length(); i++) {
                     CarPark carPark = new CarPark();
-                    ArrayList coordinates = new ArrayList();
+                    ArrayList coordinates = new ArrayList<>();
                     JSONObject properties = features.getJSONObject(i).getJSONObject("properties");
 
                     carPark.setName(properties.getString("DESCRIPTIO"));
@@ -292,10 +313,12 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 }
                 //Sort car park list alphabetically
                 Collections.sort(carParks, new NameSorter());
+                Log.e("Car parks added: ", carParks.size() + "");
                 adapter.getMap().addMapMarkers(carParks);
+                adapter.getMap().drawCarParkLines();
                 adapter.getList().carParksChanged();
             } catch (Exception e) {
-
+                Log.e("test", ""+e);
             }
 
 

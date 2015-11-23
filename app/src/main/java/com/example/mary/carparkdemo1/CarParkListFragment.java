@@ -21,23 +21,20 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-/**
- * Created by michael.carr on 17/11/15.
- */
+
 public class CarParkListFragment extends Fragment implements AbsListView.OnItemClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     ListViewAdapter mAdapter;
     // reference to MainActivity's car park list
     ArrayList<CarPark> carParks;
-    private AbsListView mListView;
+
     private OnFragmentInteractionListener mListener;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     public Location mCurrentLocation;
     private static final long POLLING_FREQ = 1000 * 30;
     private static final long FASTEST_UPDATE_FREQ = 1000 * 5;
-    private static final float MIN_ACCURACY = 25.0f;
-    private static final float MIN_LAST_READ_ACCURACY = 500.0f;
+
 
     public CarParkListFragment() {
 
@@ -52,7 +49,7 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
         mAdapter = new ListViewAdapter(getActivity(), carParks);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(R.id.carParkList);
+        AbsListView mListView = (AbsListView) view.findViewById(R.id.carParkList);
         mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks

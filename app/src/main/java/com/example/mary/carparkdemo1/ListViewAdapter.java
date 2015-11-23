@@ -39,7 +39,7 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         CarPark carPark = getItem(position);
-        View viewToUse = null;
+        View viewToUse;
 
         // This block exists to inflate the settings list item conditionally based on whether
         // we want to support a grid or list view.

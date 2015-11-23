@@ -3,12 +3,8 @@ package com.example.mary.carparkdemo1;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.io.Serializable;
 
-/**
- * Created by Mary on 17/10/2015.
- */
-public class CarPark implements Serializable, Comparable<CarPark> {
+public class CarPark {
 
     private String name;
     private String address;
@@ -101,11 +97,6 @@ public class CarPark implements Serializable, Comparable<CarPark> {
         }
 
         return new LatLng(totalLat / coordinates.size(), totalLng / coordinates.size());
-    }
-
-    @Override
-    public int compareTo(CarPark another) {
-        return 0;
     }
 
 }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class CarParkMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // inflate and return the layout
 
+        Log.e("test", "MapFragment oncreate for " + this);
         View v = inflater.inflate(R.layout.fragment_map, container,false);
 
         mMapView = (MapView) v.findViewById(R.id.myMapView);
@@ -49,9 +51,6 @@ public class CarParkMapFragment extends Fragment {
 
         // create the google map
         googleMap = mMapView.getMap();
-
-
-
 
         // add map content
         addMapContent();
@@ -70,6 +69,7 @@ public class CarParkMapFragment extends Fragment {
 
     public void addMapContent() {
 
+        Log.e("Add map content","called");
         /** Make sure that the map has been initialised **/
         if (null != googleMap) {
 
@@ -95,7 +95,8 @@ public class CarParkMapFragment extends Fragment {
                 @Override
                 public View getInfoContents(Marker marker) {
 
-                    View v = getActivity().getLayoutInflater().inflate(R.layout.info_window, null);
+                    View v;
+                    v = getActivity().getLayoutInflater().inflate(R.layout.info_window, null);
 
 
                     TextView winTitle = (TextView) v.findViewById(R.id.winTitle);
@@ -142,8 +143,8 @@ public class CarParkMapFragment extends Fragment {
     // add markers to the map
     // markers show the number of free spaces, and are coloured according to the number of free spaces
 
-    private void drawCarParkLines() {
-
+    public void drawCarParkLines() {
+        Log.e("Draw car park lines", "called");
         for (CarPark carPark : ((MainActivity)getActivity()).getCarParks()) {
             LatLng previousPos = null;
             for (LatLng coordinates : carPark.getCoordinates()) {
@@ -199,6 +200,7 @@ public class CarParkMapFragment extends Fragment {
                     .snippet("Empty Spaces: " + spacesText + "/" + carPark.getTotalSpaces() + "\n\nAddress: " + carPark.getAddress())
                     .icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
                     .draggable(false));
+
         }
     }
 
