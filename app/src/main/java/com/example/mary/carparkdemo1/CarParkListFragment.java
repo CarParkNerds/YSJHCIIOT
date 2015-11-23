@@ -2,6 +2,7 @@ package com.example.mary.carparkdemo1;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -17,16 +24,22 @@ import java.util.ArrayList;
 /**
  * Created by michael.carr on 17/11/15.
  */
-public class CarParkListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class CarParkListFragment extends Fragment implements AbsListView.OnItemClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     ListViewAdapter mAdapter;
     // reference to MainActivity's car park list
     ArrayList<CarPark> carParks;
     private AbsListView mListView;
     private OnFragmentInteractionListener mListener;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    public Location mCurrentLocation;
+    private static final long POLLING_FREQ = 1000 * 30;
+    private static final long FASTEST_UPDATE_FREQ = 1000 * 5;
+    private static final float MIN_ACCURACY = 25.0f;
+    private static final float MIN_LAST_READ_ACCURACY = 500.0f;
 
-
-    public CarParkListFragment(){
+    public CarParkListFragment() {
 
     }
 
@@ -45,8 +58,30 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(POLLING_FREQ);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_FREQ);
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -66,6 +101,44 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        if (servicesAvailable()) {
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            carParksChanged();
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+        carParksChanged();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    private boolean servicesAvailable() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+
+        if (ConnectionResult.SUCCESS == resultCode) {
+            return true;
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0).show();
+            return false;
+        }
+
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
@@ -92,8 +165,8 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
         startActivity(intent);
 
     }
-    public void carParksChanged()
-    {
+
+    public void carParksChanged() {
         mAdapter.notifyDataSetChanged();
     }
 

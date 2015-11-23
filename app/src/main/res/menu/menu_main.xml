@@ -15,9 +15,11 @@
                 <item
                     android:id="@+id/menuSortAlphabetical"
                     android:title="Sort by name" />
+                <group android:id="@+id/distanceSort">
                 <item
                     android:id="@+id/menuSortDistance"
                     android:title="Sort by distance" />
+                </group>
                 <item
                     android:id="@+id/menuSortSpaces"
                     android:title="Sort by empty spaces" />"

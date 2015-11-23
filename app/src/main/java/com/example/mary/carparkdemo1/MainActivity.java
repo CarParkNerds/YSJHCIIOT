@@ -78,9 +78,8 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
             public void onPageSelected(int position) {
                 if (position == 1) {
                     menu.setGroupVisible(R.id.sortGroup, true);
-                }
-                else if (position == 0){
-                    menu.setGroupVisible(R.id.sortGroup,false);
+                } else if (position == 0) {
+                    menu.setGroupVisible(R.id.sortGroup, false);
                 }
             }
 
@@ -163,9 +162,9 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 float results[] = new float[1];
                 for (CarPark c : carParks) {
                     LatLng carParkLocation = c.getMidPointLocation();
-                    Location.distanceBetween(carParkLocation.latitude,carParkLocation.longitude,myLocation.getLatitude(),myLocation.getLongitude(),results);
+                    Location.distanceBetween(carParkLocation.latitude, carParkLocation.longitude, myLocation.getLatitude(), myLocation.getLongitude(), results);
                     c.setDistanceFromLocation(results[0]);
-               }
+                }
                 Collections.sort(carParks, new DistanceSorter());
                 adapter.getList().mAdapter.notifyDataSetChanged();
                 return true;
@@ -181,16 +180,30 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         }
     }
 
-    public void showOverflowMenu(boolean showMenu){
-        if(menu == null)
+    public void showOverflowMenu(boolean showMenu) {
+        if (menu == null)
             return;
         menu.setGroupVisible(R.id.sortGroup, showMenu);
+
+    }
+
+    public float getDistanceFrom(CarPark carPark) {
+        float results[] = new float[1];
+
+        Location myLocation = adapter.getList().mCurrentLocation;
+        if (myLocation == null){
+            return 0;
+        }
+        LatLng carParkLocation = carPark.getMidPointLocation();
+        Location.distanceBetween(carParkLocation.latitude, carParkLocation.longitude, myLocation.getLatitude(), myLocation.getLongitude(), results);
+        return results[0];
     }
 
 
-    public void onFragmentInteraction(String id){}
+    public void onFragmentInteraction(String id) {
+    }
 
-    public ArrayList<CarPark> getCarParks(){
+    public ArrayList<CarPark> getCarParks() {
         return carParks;
     }
 

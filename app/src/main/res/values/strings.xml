@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Car Park Occupancy</string>
+    <string name="app_name">Space Finder</string>
     <string name="title_activity_about">About</string>
     <string name="title_activity_help">Help</string>
 

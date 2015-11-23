@@ -50,6 +50,9 @@ public class CarParkMapFragment extends Fragment {
         // create the google map
         googleMap = mMapView.getMap();
 
+
+
+
         // add map content
         addMapContent();
 

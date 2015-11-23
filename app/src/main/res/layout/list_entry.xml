@@ -41,10 +41,18 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/carParkAddress"
+                android:id="@+id/carParkDistance"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/carParkFreeSpaces"
+                android:padding="5sp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/carParkAddress"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/carParkDistance"
                 android:padding="5sp"
                 android:textSize="14sp" />
         </RelativeLayout>

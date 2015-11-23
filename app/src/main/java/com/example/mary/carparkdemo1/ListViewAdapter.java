@@ -19,9 +19,9 @@ import java.util.List;
 public class ListViewAdapter extends ArrayAdapter<CarPark> {
 
     private Context context;
-    private boolean useList = true;
+    private ViewHolder holder;
 
-    public ListViewAdapter(Context context, List items) {
+    public ListViewAdapter(Context context, List<CarPark> items) {
         super(context, android.R.layout.simple_selectable_list_item, items);
         this.context = context;
     }
@@ -29,23 +29,16 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
     /**
      * Holder for the list items.
      */
-    private class ViewHolder{
+    private class ViewHolder {
         TextView carParkName;
-        TextView carParkAddress;
         TextView carParkFreeSpaces;
+        TextView carParkDistance;
+        TextView carParkAddress;
     }
 
-    /**
-     *
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        CarPark carPark = (CarPark) getItem(position);
+        CarPark carPark = getItem(position);
         View viewToUse = null;
 
         // This block exists to inflate the settings list item conditionally based on whether
@@ -54,9 +47,10 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
         if (convertView == null) {
             viewToUse = mInflater.inflate(R.layout.list_entry, null);
             holder = new ViewHolder();
-            holder.carParkName = (TextView)viewToUse.findViewById(R.id.carParkName);
-            holder.carParkAddress = (TextView)viewToUse.findViewById(R.id.carParkAddress);
-            holder.carParkFreeSpaces = (TextView)viewToUse.findViewById(R.id.carParkFreeSpaces);
+            holder.carParkName = (TextView) viewToUse.findViewById(R.id.carParkName);
+            holder.carParkAddress = (TextView) viewToUse.findViewById(R.id.carParkAddress);
+            holder.carParkFreeSpaces = (TextView) viewToUse.findViewById(R.id.carParkFreeSpaces);
+            holder.carParkDistance = (TextView) viewToUse.findViewById(R.id.carParkDistance);
 
             viewToUse.setTag(holder);
         } else {
@@ -74,18 +68,25 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
         if (carPark.getFreeSpacesNumber() >= 30) {
             cardView.setBackgroundColor(Color.rgb(102, 153, 0));
         }
-        if (carPark.isFreeSpacesKnown() == false) {
+        if (!carPark.isFreeSpacesKnown()) {
             cardView.setBackgroundColor(Color.rgb(0, 153, 204));
         }
         holder.carParkName.setText(carPark.getName());
+        displayMiles(((MainActivity) context).getDistanceFrom(carPark));
         holder.carParkAddress.setText(carPark.getAddress());
 
-
         if (carPark.isFreeSpacesKnown()) {
-            holder.carParkFreeSpaces.setText(Integer.toString(carPark.getFreeSpacesNumber()) + "/" + carPark.getTotalSpaces() + " empty spaces");
+            holder.carParkFreeSpaces.setText(String.format("%d/%d empty spaces",carPark.getFreeSpacesNumber(), carPark.getTotalSpaces()));
         } else {
             holder.carParkFreeSpaces.setText("Unknown");
         }
         return viewToUse;
     }
+
+    private void displayMiles(float distance){
+        distance /= 1000;
+        distance *= 0.621371f;
+        holder.carParkDistance.setText(String.format("%.2f miles from you",distance));
+    }
+
 }
