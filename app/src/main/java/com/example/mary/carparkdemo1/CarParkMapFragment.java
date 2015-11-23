@@ -193,7 +193,7 @@ public class CarParkMapFragment extends Fragment {
             googleMap.addMarker(new MarkerOptions()
                     .position(carPark.getMidPointLocation())
                     .title(carPark.getName())
-                    .snippet("Free Spaces: " + spacesText + "/" + carPark.getTotalSpaces() + "\n\nAddress: " + carPark.getAddress())
+                    .snippet("Empty Spaces: " + spacesText + "/" + carPark.getTotalSpaces() + "\n\nAddress: " + carPark.getAddress())
                     .icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
                     .draggable(false));
         }

@@ -68,6 +68,27 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1) {
+                    menu.setGroupVisible(R.id.sortGroup, true);
+                }
+                else if (position == 0){
+                    menu.setGroupVisible(R.id.sortGroup,false);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
@@ -96,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.setGroupVisible(R.id.sortGroup, false);
         return true;
     }
 
@@ -146,12 +168,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                }
                 Collections.sort(carParks, new DistanceSorter());
                 adapter.getList().mAdapter.notifyDataSetChanged();
-                Log.e("Sorted by", "distance");
                 return true;
             case R.id.menuSortSpaces:
                 Collections.sort(carParks, new SpacesSorter());
                 adapter.getList().mAdapter.notifyDataSetChanged();
-                Log.e("Sorted by", "free spaces");
                 return true;
 
             default:
@@ -279,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 carPark.setFreeSpacesNumber(free);
 
             }
-            //Set total spaces to be round number greater than free spaces and rounded to 5
+            //Set total spaces to be round number greater than empty spaces and rounded to 5
             carPark.setTotalSpaces(((r.nextInt(300) + free) + 4) / 5 * 5);
 
         }

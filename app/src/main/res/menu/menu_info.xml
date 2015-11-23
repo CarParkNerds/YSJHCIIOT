@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
     <item
+        android:title="Navigate"
         android:id="@+id/action_navigate"
         android:icon="@drawable/ic_directions_white_24dp"
         app:showAsAction="always|withText" />

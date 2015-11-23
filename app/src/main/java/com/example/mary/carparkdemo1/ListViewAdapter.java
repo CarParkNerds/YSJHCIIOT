@@ -82,7 +82,7 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
 
 
         if (carPark.isFreeSpacesKnown()) {
-            holder.carParkFreeSpaces.setText(Integer.toString(carPark.getFreeSpacesNumber()) + " free spaces");
+            holder.carParkFreeSpaces.setText(Integer.toString(carPark.getFreeSpacesNumber()) + "/" + carPark.getTotalSpaces() + " empty spaces");
         } else {
             holder.carParkFreeSpaces.setText("Unknown");
         }
