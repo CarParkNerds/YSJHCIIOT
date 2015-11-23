@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("Test", "on create called");
 
         setContentView(R.layout.activity_main);
         showOverflowMenu(false);
@@ -113,20 +112,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
 
     @Override
-    protected void onResume(){
-        super.onResume();
-        Log.e("Test", "on resume called");
-    }
-
-
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        Log.e("Test", "on destroy called");
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
@@ -170,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
             case R.id.menuSortAlphabetical:
                 Collections.sort(carParks, new NameSorter());
                 adapter.getList().mAdapter.notifyDataSetChanged();
-                Log.e("Sorted by", "name");
                 return true;
             case R.id.menuSortDistance:
                 Location myLocation = carParkMapFragment.googleMap.getMyLocation();
@@ -246,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
         //Downloads the data from the URL requested
         private String downloadUrl(String strUrl) throws IOException {
-            Log.e("Test", "download url");
             String data = "";
             URL url = new URL(strUrl);
             // Creating an http connection to communicate with url
@@ -313,7 +296,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 }
                 //Sort car park list alphabetically
                 Collections.sort(carParks, new NameSorter());
-                Log.e("Car parks added: ", carParks.size() + "");
                 adapter.getMap().addMapMarkers(carParks);
                 adapter.getMap().drawCarParkLines();
                 adapter.getList().carParksChanged();
