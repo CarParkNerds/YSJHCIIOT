@@ -7,10 +7,6 @@
     <string name="AboutInfo">The car park names and locations are obtained from York Open Data:\nhttp://data.yorkopendata.org/\n(Contains public sector information licensed under the Open Government Licence v2.0.:\nhttp://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/)\n\nAdditional information is obtained from the York Council Car Parks Directory:\nhttps://www.york.gov.uk/directory/14/car_parks_directory</string>
     <string name="appFunction">This app shows you the number of empty spaces in York Council car parks.\n\nYou can choose to show the car parks on a map or on a list. Click the headings at the top of the screen to switch between them.\n\nWhen the app starts, it shows the number of empty spaces. As these numbers will change as people enter or leave the car park, you can update this information by clicking the refresh (circle/arrow) icon at the top right of the screen.
     </string>
-
-    <string name="directionsText">Get directions</string>
-
-
     <string name="mapFunction">The map shows the location of the car parks with a marker that indicates the number of empty spaces. These are colour coded to give you a quick overview:\n\n
     <b>Red</b> - 0-9 empty spaces\n\n
     Orange - 10-29 empty spaces\n\n

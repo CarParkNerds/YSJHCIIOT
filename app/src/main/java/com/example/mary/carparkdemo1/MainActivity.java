@@ -44,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
     int numbOfTabs = 2;
     ArrayList<CarPark> carParks = new ArrayList<>();
     Menu menu;
+    int sortedBy;
+    int NAME = -1;
+    int DISTANCE = 0;
+    int EMPTY_SPACES = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
                 carParkMapFragment.addMapMarkers(carParks);
                 adapter.getList().carParksChanged();
+
+                if (sortedBy == EMPTY_SPACES){
+                    Collections.sort(carParks, new SpacesSorter());
+                    adapter.getList().carParksChanged();
+                }
+
                 return true;
 
             // show the Help screen
@@ -153,10 +163,12 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 startActivity(intent3);
                 return true;
             case R.id.menuSortAlphabetical:
+                sortedBy = NAME;
                 Collections.sort(carParks, new NameSorter());
-                adapter.getList().mAdapter.notifyDataSetChanged();
+                adapter.getList().carParksChanged();
                 return true;
             case R.id.menuSortDistance:
+                sortedBy = DISTANCE;
                 Location myLocation = carParkMapFragment.googleMap.getMyLocation();
                 float results[] = new float[1];
                 for (CarPark c : carParks) {
@@ -165,11 +177,13 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                     c.setDistanceFromLocation(results[0]);
                 }
                 Collections.sort(carParks, new DistanceSorter());
-                adapter.getList().mAdapter.notifyDataSetChanged();
+                adapter.getList().carParksChanged();
                 return true;
             case R.id.menuSortSpaces:
+                sortedBy = EMPTY_SPACES;
                 Collections.sort(carParks, new SpacesSorter());
-                adapter.getList().mAdapter.notifyDataSetChanged();
+                adapter.getList().carParksChanged();
+
                 return true;
 
             default:
@@ -267,6 +281,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
             JSONObject jsonObject;
             try {
                 jsonObject = new JSONObject(result);
+                Log.e("test", "downloaded " + result.length() + " bytes.");
+                if (result.length() < 256) {
+                    Log.e("test", result);
+                }
                 JSONArray features = jsonObject.getJSONArray("features");
 
                 //Access every car park

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class CarParkListFragment extends Fragment implements AbsListView.OnItemClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    ListViewAdapter mAdapter;
+    private ListViewAdapter mAdapter;
     // reference to MainActivity's car park list
     ArrayList<CarPark> carParks;
 
