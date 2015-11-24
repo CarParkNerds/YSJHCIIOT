@@ -79,18 +79,22 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 if (menu == null) {
                     return;
                 }
-
+                Log.e("Position: ", "" +position);
                 if (position == 0) {
                     menu.setGroupVisible(R.id.sortGroup, false);
+                    menu.setGroupVisible(R.id.toolbarButtons, true);
                 } else if (position == 1) {
                     menu.setGroupVisible(R.id.sortGroup, true);
+                    menu.setGroupVisible(R.id.toolbarButtons, true);
 
-                    if (adapter.getList().mCurrentLocation == null) {
-                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, false);
-                    }
-                    else{
-                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, true);
-                    }
+//                    if (adapter.getList().mCurrentLocation == null) {
+//                        Log.e("Disable distance ", "sort");
+//                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, false);
+//                    }
+//                    else{
+//                        Log.e("Enable distance ", "sort");
+//                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, true);
+//                    }
                 }
             }
 
@@ -127,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.setGroupVisible(R.id.sortGroup, false);
+       // menu.setGroupVisible(R.id.sortGroup, false);
         return true;
     }
 
