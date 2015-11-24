@@ -11,14 +11,13 @@ public class SpacesSorter implements Comparator<CarPark> {
     @Override
     public int compare(CarPark lhs, CarPark rhs) {
         int returnValue = 0;
-
-        if (lhs.getFreeSpacesNumber() > rhs.getFreeSpacesNumber()) {
-            returnValue = -1;
-        } else if (lhs.getFreeSpacesNumber()< rhs.getFreeSpacesNumber()) {
-            returnValue = 1;
-        } else if (lhs.getFreeSpacesNumber() == rhs.getFreeSpacesNumber()){
-            returnValue = 0;
-        }
+            if (lhs.getFreeSpacesNumber() > rhs.getFreeSpacesNumber()) {
+                returnValue = -1;
+            } else if (lhs.getFreeSpacesNumber() < rhs.getFreeSpacesNumber()) {
+                returnValue = 1;
+            } else if (lhs.getFreeSpacesNumber() == rhs.getFreeSpacesNumber()) {
+                returnValue = 0;
+            }
         return returnValue;
     }
 }

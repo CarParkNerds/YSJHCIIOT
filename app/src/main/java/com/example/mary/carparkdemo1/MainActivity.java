@@ -80,10 +80,17 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                     return;
                 }
 
-                if (position == 1) {
-                    menu.setGroupVisible(R.id.sortGroup, true);
-                } else if (position == 0) {
+                if (position == 0) {
                     menu.setGroupVisible(R.id.sortGroup, false);
+                } else if (position == 1) {
+                    menu.setGroupVisible(R.id.sortGroup, true);
+
+                    if (adapter.getList().mCurrentLocation == null) {
+                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, false);
+                    }
+                    else{
+                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, true);
+                    }
                 }
             }
 
@@ -143,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 carParkMapFragment.addMapMarkers(carParks);
                 adapter.getList().carParksChanged();
 
-                if (sortedBy == EMPTY_SPACES){
+                if (sortedBy == EMPTY_SPACES) {
                     Collections.sort(carParks, new SpacesSorter());
                     adapter.getList().carParksChanged();
                 }
@@ -169,21 +176,23 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 return true;
             case R.id.menuSortDistance:
                 sortedBy = DISTANCE;
-                Location myLocation = carParkMapFragment.googleMap.getMyLocation();
-                float results[] = new float[1];
-                for (CarPark c : carParks) {
-                    LatLng carParkLocation = c.getMidPointLocation();
-                    Location.distanceBetween(carParkLocation.latitude, carParkLocation.longitude, myLocation.getLatitude(), myLocation.getLongitude(), results);
-                    c.setDistanceFromLocation(results[0]);
+
+                Location myLocation = adapter.getList().mCurrentLocation;
+                if (myLocation != null) {
+                    float results[] = new float[1];
+                    for (CarPark c : carParks) {
+                        LatLng carParkLocation = c.getMidPointLocation();
+                        Location.distanceBetween(carParkLocation.latitude, carParkLocation.longitude, myLocation.getLatitude(), myLocation.getLongitude(), results);
+                        c.setDistanceFromLocation(results[0]);
+                    }
+                    Collections.sort(carParks, new DistanceSorter());
+                    adapter.getList().carParksChanged();
                 }
-                Collections.sort(carParks, new DistanceSorter());
-                adapter.getList().carParksChanged();
                 return true;
             case R.id.menuSortSpaces:
                 sortedBy = EMPTY_SPACES;
                 Collections.sort(carParks, new SpacesSorter());
                 adapter.getList().carParksChanged();
-
                 return true;
 
             default:
@@ -209,8 +218,8 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
         Location myLocation = adapter.getList().mCurrentLocation;
 
-        if (myLocation == null){
-            return 0;
+        if (myLocation == null) {
+            return -1;
         }
         LatLng carParkLocation = carPark.getMidPointLocation();
         Location.distanceBetween(carParkLocation.latitude, carParkLocation.longitude, myLocation.getLatitude(), myLocation.getLongitude(), results);
@@ -318,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 adapter.getMap().drawCarParkLines();
                 adapter.getList().carParksChanged();
             } catch (Exception e) {
-                Log.e("test", ""+e);
+                Log.e("test", "" + e);
             }
 
 
@@ -326,7 +335,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
         public void generateSpaces(CarPark carPark) {
             Random r = new Random();
-            int free = 50;
+            carPark.setFreeSpacesKnown(false);
+            carPark.setFreeSpacesNumber(0);
+
+            int free = 0;
             if (r.nextInt(4) == 1) {
                 carPark.setFreeSpacesKnown(false);
             } else {

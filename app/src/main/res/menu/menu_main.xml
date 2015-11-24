@@ -5,12 +5,12 @@
 
 
 
-
-    <group android:id="@+id/sortGroup">
         <item
+            android:id ="@+id/sort"
             android:icon="@drawable/ic_sort_white_24dp"
             android:title="Sort"
             app:showAsAction="ifRoom">
+            <group android:id="@+id/sortGroup">
             <menu>
                 <item
                     android:id="@+id/menuSortAlphabetical"
@@ -25,8 +25,8 @@
                     android:title="Sort by empty spaces" />"
 
             </menu>
+            </group>
         </item>
-    </group>
 
     <item
         android:id="@+id/action_refresh"

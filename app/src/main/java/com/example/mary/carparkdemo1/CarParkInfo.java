@@ -33,9 +33,9 @@ public class CarParkInfo extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         // show number of free spaces (show "unknown" if not known)
         if (known) {
-            toolbar.setTitle("Free Spaces: " + spaces);
+            toolbar.setTitle("Empty Spaces: " + spaces);
         } else {
-            toolbar.setTitle("Free Spaces: Unknown");
+            toolbar.setTitle("Empty Spaces: Unknown");
         }
         setSupportActionBar(toolbar);
         if(getSupportActionBar()!=null) {

@@ -103,8 +103,10 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
     public void onConnected(Bundle bundle) {
         if (servicesAvailable()) {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            carParksChanged();
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            if (mCurrentLocation != null) {
+                carParksChanged();
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
         }
     }
 
@@ -116,7 +118,9 @@ public class CarParkListFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
-        carParksChanged();
+        if (mCurrentLocation != null) {
+            carParksChanged();
+        }
     }
 
     @Override

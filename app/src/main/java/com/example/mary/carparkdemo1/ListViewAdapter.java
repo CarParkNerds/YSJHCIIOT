@@ -58,35 +58,58 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
             holder = (ViewHolder) viewToUse.getTag();
         }
         CardView cardView = (CardView) viewToUse.findViewById(R.id.card_view);
-        if (carPark.getFreeSpacesNumber() < 10 && carPark.isFreeSpacesKnown()) {
-            cardView.setBackgroundColor(Color.rgb(204, 0, 0));
-        }
-        if (carPark.getFreeSpacesNumber() >= 10 &&
-                carPark.getFreeSpacesNumber() < 30) {
-            cardView.setBackgroundColor(Color.rgb(255, 165, 0));
-        }
-        if (carPark.getFreeSpacesNumber() >= 30) {
-            cardView.setBackgroundColor(Color.rgb(102, 153, 0));
-        }
-        if (!carPark.isFreeSpacesKnown()) {
-            cardView.setBackgroundColor(Color.rgb(0, 153, 204));
-        }
+        int[] colours = selectColours(carPark);
+        cardView.setBackgroundColor(Color.rgb(colours[0], colours[1], colours[2]));
+
         holder.carParkName.setText(carPark.getName());
-        displayMiles(((MainActivity) context).getDistanceFrom(carPark));
+
+        float distance = ((MainActivity) context).getDistanceFrom(carPark);
+        if (distance != -1) {
+            holder.carParkDistance.setText(String.format("%.2f miles from you", convertToMiles(distance)));
+        } else {
+            holder.carParkDistance.setText("Unknown distance from you");
+        }
         holder.carParkAddress.setText(carPark.getAddress());
 
         if (carPark.isFreeSpacesKnown()) {
-            holder.carParkFreeSpaces.setText(String.format("%d/%d empty spaces",carPark.getFreeSpacesNumber(), carPark.getTotalSpaces()));
+            holder.carParkFreeSpaces.setText(String.format("%d/%d empty spaces", carPark.getFreeSpacesNumber(), carPark.getTotalSpaces()));
         } else {
             holder.carParkFreeSpaces.setText("Unknown");
         }
         return viewToUse;
     }
 
-    private void displayMiles(float distance){
+    private float convertToMiles(float distance) {
         distance /= 1000;
         distance *= 0.621371f;
-        holder.carParkDistance.setText(String.format("%.2f miles from you",distance));
+        return distance;
     }
+
+    private int[] selectColours(CarPark carPark) {
+        int[] colours = new int[3];
+        if (carPark.getFreeSpacesNumber() < 10 && carPark.isFreeSpacesKnown()) {
+            colours[0] = 204;
+            colours[1] = 0;
+            colours[2] = 0;
+        }
+        if (carPark.getFreeSpacesNumber() >= 10 &&
+                carPark.getFreeSpacesNumber() < 30) {
+            colours[0] = 255;
+            colours[1] = 165;
+            colours[2] = 0;
+        }
+        if (carPark.getFreeSpacesNumber() >= 30) {
+            colours[0] = 102;
+            colours[1] = 153;
+            colours[2] = 0;
+        }
+        if (!carPark.isFreeSpacesKnown()) {
+            colours[0] = 0;
+            colours[1] = 153;
+            colours[2] = 204;
+        }
+        return colours;
+    }
+
 
 }
