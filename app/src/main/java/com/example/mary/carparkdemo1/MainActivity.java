@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 if (menu == null) {
                     return;
                 }
-                Log.e("Position: ", "" +position);
                 if (position == 0) {
                     menu.setGroupVisible(R.id.sortGroup, false);
                     menu.setGroupVisible(R.id.toolbarButtons, true);
@@ -87,14 +86,12 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                     menu.setGroupVisible(R.id.sortGroup, true);
                     menu.setGroupVisible(R.id.toolbarButtons, true);
 
-//                    if (adapter.getList().mCurrentLocation == null) {
-//                        Log.e("Disable distance ", "sort");
-//                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, false);
-//                    }
-//                    else{
-//                        Log.e("Enable distance ", "sort");
-//                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, true);
-//                    }
+                    if (adapter.getList().mCurrentLocation == null) {
+                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, false);
+                    }
+                    else{
+                        menu.findItem(R.id.sort).getSubMenu().setGroupVisible(R.id.distanceSort, true);
+                    }
                 }
             }
 
@@ -122,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         get = new getData();
         get.execute("http://data.cyc.opendata.arcgis.com/datasets/601ef57b2c7449b19630a3e243fc5293_4.geojson");
 
-
     }
 
 
@@ -131,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
-       // menu.setGroupVisible(R.id.sortGroup, false);
+        menu.setGroupVisible(R.id.sortGroup, false);
         return true;
     }
 
@@ -221,10 +217,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         }
 
         Location myLocation = adapter.getList().mCurrentLocation;
-
         if (myLocation == null) {
             return -1;
         }
+
         LatLng carParkLocation = carPark.getMidPointLocation();
         Location.distanceBetween(carParkLocation.latitude, carParkLocation.longitude, myLocation.getLatitude(), myLocation.getLongitude(), results);
         return results[0];
@@ -323,7 +319,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
 
                     carParks.add(carPark);
 
-
                 }
                 //Sort car park list alphabetically
                 Collections.sort(carParks, new NameSorter());
@@ -333,8 +328,6 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
             } catch (Exception e) {
                 Log.e("test", "" + e);
             }
-
-
         }
 
         public void generateSpaces(CarPark carPark) {
@@ -355,6 +348,5 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
             carPark.setTotalSpaces(((r.nextInt(300) + free) + 4) / 5 * 5);
 
         }
-
     }
 }

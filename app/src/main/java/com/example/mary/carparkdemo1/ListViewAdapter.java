@@ -58,8 +58,8 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
             holder = (ViewHolder) viewToUse.getTag();
         }
         CardView cardView = (CardView) viewToUse.findViewById(R.id.card_view);
-        int[] colours = selectColours(carPark);
-        cardView.setBackgroundColor(Color.rgb(colours[0], colours[1], colours[2]));
+      //  int[] colours = selectColours(carPark);
+      //  cardView.setBackgroundColor(Color.rgb(colours[0], colours[1], colours[2]));
 
         holder.carParkName.setText(carPark.getName());
 
@@ -76,6 +76,10 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
         } else {
             holder.carParkFreeSpaces.setText("Unknown");
         }
+        int [] colours = selectColours(carPark);
+        holder.carParkFreeSpaces.setTextColor(Color.rgb(colours[0], colours[1], colours[2]));
+
+
         return viewToUse;
     }
 

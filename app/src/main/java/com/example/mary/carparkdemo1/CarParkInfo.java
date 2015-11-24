@@ -43,12 +43,10 @@ public class CarParkInfo extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-
         // display council car park directory web page for this car park
         WebView webView = (WebView) findViewById(R.id.webView1);
         webView.setWebViewClient(new WebViewClient());      // this forces it to open in the app not in a separate browser
         webView.getSettings().setJavaScriptEnabled(true);
-
         webView.loadUrl(website);
     }
 

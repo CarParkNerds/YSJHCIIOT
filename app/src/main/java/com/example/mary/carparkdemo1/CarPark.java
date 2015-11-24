@@ -16,7 +16,6 @@ public class CarPark {
     private float distanceFromLocation;
 
     public CarPark() {
-
     }
 
     public int getTotalSpaces() {
@@ -26,7 +25,6 @@ public class CarPark {
     public void setTotalSpaces(int totalSpaces) {
         this.totalSpaces = totalSpaces;
     }
-
 
     public String getName() {
         return name;
@@ -76,7 +74,6 @@ public class CarPark {
         this.freeSpacesKnown = freeSpacesKnown;
     }
 
-
     public float getDistanceFromLocation() {
         return distanceFromLocation;
     }
@@ -84,7 +81,6 @@ public class CarPark {
     public void setDistanceFromLocation(float distanceFromLocation) {
         this.distanceFromLocation = distanceFromLocation;
     }
-
 
     //Calculate the midpoint of the car park by getting the average of the coordinates
     public LatLng getMidPointLocation() {
