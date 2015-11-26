@@ -77,8 +77,11 @@ public class ListViewAdapter extends ArrayAdapter<CarPark> {
             holder.carParkFreeSpaces.setText("Unknown");
         }
         int [] colours = selectColours(carPark);
-        holder.carParkFreeSpaces.setTextColor(Color.rgb(colours[0], colours[1], colours[2]));
 
+        holder.carParkName.setTextColor(Color.rgb(colours[0],colours[1],colours[2]));
+        holder.carParkAddress.setTextColor(Color.rgb(colours[0],colours[1],colours[2]));
+        holder.carParkFreeSpaces.setTextColor(Color.rgb(colours[0], colours[1], colours[2]));
+        holder.carParkDistance.setTextColor(Color.rgb(colours[0], colours[1], colours[2]));
 
         return viewToUse;
     }
