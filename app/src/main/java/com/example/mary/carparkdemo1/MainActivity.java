@@ -127,7 +127,13 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.setGroupVisible(R.id.sortGroup, false);
+        if(adapter.getMap().isVisible()) {
+            Log.e("Map", "visible");
+            menu.setGroupVisible(R.id.sortGroup, false);
+        }else if (adapter.getList().isVisible()){
+            Log.e("Map", "not visible");
+            menu.setGroupVisible(R.id.sortGroup, true);
+        }
         return true;
     }
 
