@@ -318,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                     carPark.setCoordinates(coordinates);
                     carPark.setWebPage(properties.getString("WEBSITE2"));
                     carPark.setAddress(properties.getString("LV_DETAILS"));
+                    carPark.setTotalSpaces(properties.getInt("CARPARKSPACES"));
 
                     //Generate whether number of spaces is known and number + total if known
                     generateSpaces(carPark);
@@ -345,12 +346,10 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 carPark.setFreeSpacesKnown(false);
             } else {
                 carPark.setFreeSpacesKnown(true);
-                free = r.nextInt(100);
+                free = r.nextInt(carPark.getTotalSpaces());
                 carPark.setFreeSpacesNumber(free);
 
             }
-            //Set total spaces to be round number greater than empty spaces and rounded to 5
-            carPark.setTotalSpaces(((r.nextInt(300) + free) + 4) / 5 * 5);
 
         }
     }
