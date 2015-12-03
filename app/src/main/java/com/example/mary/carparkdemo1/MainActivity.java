@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements CarParkListFragme
                 for (CarPark carPark : carParks) {
                     get.generateSpaces(carPark);
                 }
-
+		carParkMapFragment.drawCarParkLines();
                 carParkMapFragment.addMapMarkers(carParks);
                 adapter.getList().carParksChanged();
 
